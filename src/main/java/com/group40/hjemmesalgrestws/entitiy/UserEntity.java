@@ -25,7 +25,7 @@ public class UserEntity implements Serializable {
     @Column(nullable = false, length = 5)
     private String zipCode;
     @Column(nullable = false, length = 15, unique = true)
-    private String id; //offentligt id til at tilgå brugeren
+    private String userId; //offentligt id til at tilgå brugeren
     @Column(nullable = false, length = 50)
     private String address;
     @Column(nullable = false, length = 10)
@@ -81,12 +81,12 @@ public class UserEntity implements Serializable {
         this.zipCode = zipCode;
     }
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getAddress() {

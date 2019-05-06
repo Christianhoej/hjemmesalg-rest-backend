@@ -10,4 +10,6 @@ public interface UserService {
     UserDTO updateUser(UserDTO userDTO, String id);
 
     UserDTO logInUser(UserLoginModel userLoginModel);
+
+    UserDTO getUserByUserID(String id);
 }

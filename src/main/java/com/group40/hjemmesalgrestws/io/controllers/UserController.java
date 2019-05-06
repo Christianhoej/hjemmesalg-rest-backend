@@ -34,16 +34,8 @@ public class UserController {
     public UserRest getUser(@PathVariable String id){
         UserRest returnValue = new UserRest();
 
-        String test = id;
-        returnValue.setId(test);
-        returnValue.setAddress(test);
-        returnValue.setBirthday(test);
-        returnValue.setEmail(test);
-        returnValue.setFirstName(test);
-        returnValue.setLastName(test);
-        returnValue.setPassword(test);
-        returnValue.setPhonenumber(test);
-        returnValue.setZipCode(test);
+        UserDTO userDTO = userService.getUserByUserID(id);
+        BeanUtils.copyProperties(userDTO,returnValue);
 
         return returnValue;
     }
@@ -80,7 +72,7 @@ public class UserController {
     public UserRest deleteUser(@PathVariable String userID){
         UserRest returnValue = new UserRest();
         String test = "Deleted " + userID;
-        returnValue.setId(test);
+        returnValue.setUserId(test);
         returnValue.setAddress(test);
         returnValue.setBirthday(test);
         returnValue.setEmail(test);
