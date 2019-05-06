@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class AdDTO implements Serializable {
     private static final long serialVersionUID = 4231L;
-    private int id;
+    private int adId;
     private String email;
     private String header;
     private String date;
@@ -21,12 +21,12 @@ public class AdDTO implements Serializable {
         this.category = category;
     }
 
-    public int getId() {
-        return id;
+    public int getAdId() {
+        return adId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAdId(int adId) {
+        this.adId = adId;
     }
 
     public String getEmail() {

@@ -43,16 +43,17 @@ public class AdController {
         AdRest returnValue = new AdRest();
         BeanUtils.copyProperties(adDetails,returnValue);
         returnValue.setHeader(returnValue.getHeader() + " Dette har ændret sig");
-        returnValue.setId(Integer.parseInt(id));
+        returnValue.setAdId(Integer.parseInt(id));
         return returnValue;
     }
     @CrossOrigin(origins = "*")
     @GetMapping(path = "/{id}")
     public AdRest getAd(@PathVariable String id){
         AdRest returnValue = new AdRest();
-        returnValue.setId(6454);
-        returnValue.setHeader(returnValue.getHeader() + " Dette er en specifik ad");
-        returnValue.setId(Integer.parseInt(id));
+
+        AdDTO adDTO = adService.getAdByadId(id);
+        BeanUtils.copyProperties(adDTO,returnValue);
+
         return returnValue;
     }
     @CrossOrigin(origins = "*")
@@ -62,7 +63,7 @@ public class AdController {
         userCreds.getPassword();
         AdRest returnValue = new AdRest();
         returnValue.setHeader(returnValue.getHeader() + " Dette er en specifik ad der er blevet slettet");
-        returnValue.setId(Integer.parseInt(id));
+        returnValue.setAdId(Integer.parseInt(id));
         return returnValue;
     }
     @GetMapping()
