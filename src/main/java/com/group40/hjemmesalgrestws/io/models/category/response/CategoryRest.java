@@ -2,7 +2,7 @@ package com.group40.hjemmesalgrestws.io.models.category.response;
 
 public class CategoryRest {
     private String categoryName;
-    private int id;
+    private int categoryId;
 
     public String getCategoryName() {
         return categoryName;
@@ -12,11 +12,11 @@ public class CategoryRest {
         this.categoryName = categoryname;
     }
 
-    public int getId() {
-        return id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }

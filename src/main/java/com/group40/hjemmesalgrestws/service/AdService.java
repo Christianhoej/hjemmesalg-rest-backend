@@ -12,4 +12,8 @@ public interface AdService {
     List<AdDTO> getCategoryAds(int page, int limit, String categoryName);
 
     AdDTO getAdByadId(String id);
+
+    AdDTO updateAd(AdDTO adDTO, String id);
+
+    boolean deleteByAdId(String id);
 }

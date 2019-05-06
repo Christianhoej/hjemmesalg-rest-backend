@@ -51,9 +51,19 @@ public class AdService_Impl implements AdService {
 
     @Override
     public List<AdDTO> getCategoryAds(int page, int limit, String categoryName) {
-        //Find Ads med kategorier
+        List<AdDTO> returnValue = new ArrayList<>();
+        System.out.println();
+        Pageable pageableRequest = PageRequest.of(page, limit);
 
-        return null;
+        Page<AdEntity> categoriesPage = adRepository.findAll(pageableRequest);
+        List<AdEntity> ads = categoriesPage.getContent();
+
+        for(AdEntity ad: ads){
+            AdDTO adDTO = new AdDTO();
+            BeanUtils.copyProperties(ad, adDTO);
+            returnValue.add(adDTO);
+        }
+        return returnValue;
     }
 
     @Override
@@ -66,5 +76,41 @@ public class AdService_Impl implements AdService {
         BeanUtils.copyProperties(adEntity,returnValue);
         return returnValue;
     }
+
+    @Override
+    public AdDTO updateAd(AdDTO adDTO, String id) {
+        AdDTO returnValue = new AdDTO();
+
+        AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
+
+        if(!(adEntity.getAdId() == Integer.parseInt(id))) {
+            //throw new /*NoSuchUser*/Exception;
+            return null;
+        }
+        adEntity.setCategory(adDTO.getCategory());
+        adEntity.setDate(adDTO.getDate());
+        adEntity.setDescription(adDTO.getDescription());
+        adEntity.setHeader(adDTO.getHeader());
+        adEntity.setImageURL(adDTO.getImageURL());
+        adEntity.setPrice(adDTO.getPrice());
+
+        AdEntity updatedUserDetails = adRepository.save(adEntity);
+        BeanUtils.copyProperties(updatedUserDetails,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public boolean deleteByAdId(String id) {
+        boolean returnValue;
+        AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
+
+        if(adEntity== null) // TODO throw new adNotFoundException
+            returnValue = false;
+        else
+            returnValue = true;
+        adRepository.delete(adEntity);
+
+        return returnValue;    }
+
 
 }

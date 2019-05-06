@@ -5,6 +5,7 @@ import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.io.models.category.request.CategoryDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.category.response.CategoryRest;
+import com.group40.hjemmesalgrestws.io.models.shared.response.DeleteStatusModel;
 import com.group40.hjemmesalgrestws.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,18 +50,33 @@ public class CategoryController {
     @PutMapping(path="/{id}")
     @CrossOrigin(origins = "*")
     public CategoryRest updateCategory(@RequestBody CategoryDetailsModel newCategoryName, @PathVariable String id) {
+
+
         CategoryRest returnValue = new CategoryRest();
-        BeanUtils.copyProperties(newCategoryName, returnValue);
-        returnValue.setId(Integer.parseInt(id));
+
+        CategoryDTO categoryDTO = new CategoryDTO();
+        BeanUtils.copyProperties(newCategoryName,categoryDTO);
+
+        CategoryDTO updatedCategory = categoryService.updateCategory(categoryDTO, id);
+        //System.out.println(updatedCategory.get);
+        BeanUtils.copyProperties(updatedCategory, returnValue);
+
         return returnValue;
+
 
     }
     @DeleteMapping(path="/{id}")
     @CrossOrigin(origins = "*")
-    public CategoryRest deleteCategory(@PathVariable String id) {
-        CategoryRest returnValue = new CategoryRest();
-        returnValue.setId(Integer.parseInt(id));
-        returnValue.setCategoryName(id + " er nu slettet");
+    public DeleteStatusModel deleteCategory(@PathVariable String id) {
+        DeleteStatusModel returnValue = new DeleteStatusModel();
+        returnValue.setOperationName("Delete Category by categoryId: " + id + ": ");
+
+        boolean succesDelete = categoryService.deleteCategoryById(id);
+        if(succesDelete)
+            returnValue.setOperationResult("SUCCES");
+        else
+            returnValue.setOperationResult("FAILED");
+
         return returnValue;
 
     }
