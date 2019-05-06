@@ -10,4 +10,6 @@ public interface AdService {
     List<AdDTO> getAllAds(int page, int limit);
 
     List<AdDTO> getCategoryAds(int page, int limit, String categoryName);
+
+    AdDTO getAdByadId(String id);
 }

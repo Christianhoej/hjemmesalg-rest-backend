@@ -55,4 +55,16 @@ public class AdService_Impl implements AdService {
 
         return null;
     }
+
+    @Override
+    public AdDTO getAdByadId(String id) {
+        AdDTO returnValue = new AdDTO();
+        AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
+        if(adEntity== null) // TODO throw new usernamenotfoundexception
+            return null;
+
+        BeanUtils.copyProperties(adEntity,returnValue);
+        return returnValue;
+    }
+
 }

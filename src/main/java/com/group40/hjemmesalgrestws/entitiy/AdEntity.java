@@ -11,7 +11,7 @@ public class AdEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    private int id;
+    private int adId;
     @Column(nullable = false, length = 100)
     private String email;
     @Column(nullable = false, length = 100)
@@ -36,12 +36,12 @@ public class AdEntity implements Serializable {
         this.category = category;
     }
 
-    public int getId() {
-        return id;
+    public int getAdId() {
+        return adId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAdId(int adId) {
+        this.adId = adId;
     }
 
     public String getEmail() {

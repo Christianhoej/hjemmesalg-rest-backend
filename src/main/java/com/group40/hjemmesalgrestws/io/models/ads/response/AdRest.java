@@ -1,7 +1,7 @@
 package com.group40.hjemmesalgrestws.io.models.ads.response;
 
 public class AdRest {
-    private int id;
+    private int adId;
     private String email;
     private String header;
     private String date;
@@ -18,12 +18,12 @@ public class AdRest {
         this.category = category;
     }
 
-    public int getId() {
-        return id;
+    public int getAdId() {
+        return adId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAdId(int adId) {
+        this.adId = adId;
     }
 
     public String getEmail() {
