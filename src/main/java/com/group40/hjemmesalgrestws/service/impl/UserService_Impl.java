@@ -84,4 +84,18 @@ public class UserService_Impl implements UserService {
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
     }
+
+    @Override
+    public boolean deleteUserById(String userID) {
+        boolean returnValue;
+        UserEntity userEntity = userRepository.findByUserId(userID);
+
+        if(userEntity== null) // TODO throw new usernamenotfoundexception
+            returnValue = false;
+        else
+            returnValue = true;
+        userRepository.delete(userEntity);
+
+        return returnValue;
+    }
 }
