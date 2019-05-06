@@ -19,14 +19,24 @@ public class UserService_Impl implements UserService {
     UserRepository userRepository;
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
-        userEntity.setUserId(utils.generateUserId(15));
-        UserEntity storedUserDetails = userRepository.save(userEntity);
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(storedUserDetails, returnValue);
+        UserEntity check = userRepository.findByEmail(userDTO.getEmail());
+        System.out.println("helloooo" + check);
+        if(check!=null){
+            return null;
+            // TODO check for bruger oprettet
+        }
+        else{
+            UserEntity userEntity = new UserEntity();
+            BeanUtils.copyProperties(userDTO, userEntity);
+            userEntity.setUserId(utils.generateUserId(15));
+            UserEntity storedUserDetails = userRepository.save(userEntity);
+            UserDTO returnValue = new UserDTO();
+            BeanUtils.copyProperties(storedUserDetails, returnValue);
 
-        return returnValue;
+            return returnValue;
+        }
+
+
     }
 
     @Override

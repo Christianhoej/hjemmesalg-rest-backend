@@ -12,7 +12,7 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 123454L;
 
     @Id
-    @Column(length = 200)
+    @Column(length = 200, unique = true)
     private String email;
     @Column(nullable = false, length = 30)
     private String password;
