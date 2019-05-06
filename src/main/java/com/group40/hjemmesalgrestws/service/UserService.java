@@ -12,4 +12,6 @@ public interface UserService {
     UserDTO logInUser(UserLoginModel userLoginModel);
 
     UserDTO getUserByUserID(String id);
+
+    boolean deleteUserById(String userID);
 }

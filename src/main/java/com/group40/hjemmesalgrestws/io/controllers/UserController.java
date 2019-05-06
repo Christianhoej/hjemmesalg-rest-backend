@@ -1,6 +1,7 @@
 package com.group40.hjemmesalgrestws.io.controllers;
 
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.io.models.shared.response.DeleteStatusModel;
 import com.group40.hjemmesalgrestws.io.models.user.reponse.UserRest;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
@@ -69,18 +70,15 @@ public class UserController {
     }
     @CrossOrigin(origins = "*")
     @DeleteMapping(path = "{userID}")
-    public UserRest deleteUser(@PathVariable String userID){
-        UserRest returnValue = new UserRest();
-        String test = "Deleted " + userID;
-        returnValue.setUserId(test);
-        returnValue.setAddress(test);
-        returnValue.setBirthday(test);
-        returnValue.setEmail(test);
-        returnValue.setFirstName(test);
-        returnValue.setLastName(test);
-        returnValue.setPassword(test);
-        returnValue.setPhonenumber(test);
-        returnValue.setZipCode(test);
+    public DeleteStatusModel deleteUser(@PathVariable String userID){
+        DeleteStatusModel returnValue = new DeleteStatusModel();
+        returnValue.setOperationName("Delete User by userID: " + userID + ": ");
+
+        boolean succesDelete = userService.deleteUserById(userID);
+        if(succesDelete)
+        returnValue.setOperationResult("SUCCES");
+        else
+            returnValue.setOperationResult("FAILED");
 
         return returnValue;
 
