@@ -12,17 +12,17 @@ public class CategoryEntity implements Serializable{
 
     @Id
     @GeneratedValue
-    private int id;
+    private int categoryId;
 
     @Column(nullable = false, length = 50, unique = true)
     private String categoryName;
 
-    public int getId() {
-        return id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {

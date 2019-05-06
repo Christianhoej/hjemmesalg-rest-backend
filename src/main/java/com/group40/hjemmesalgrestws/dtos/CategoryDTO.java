@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public class CategoryDTO implements Serializable {
     private static final long serialVersionUID = 4231L;
-    private int id;
+    private int categoryId;
     private String categoryName;
 
-    public int getId() {
-        return id;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {

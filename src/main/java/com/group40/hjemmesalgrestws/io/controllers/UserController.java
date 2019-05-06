@@ -62,8 +62,8 @@ public class UserController {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userdetails,userDTO);
         System.out.println(userDTO.getFirstName());
-        UserDTO createdUser = userService.updateUser(userDTO, id);
-        BeanUtils.copyProperties(createdUser, returnValue);
+        UserDTO updatedUser = userService.updateUser(userDTO, id);
+        BeanUtils.copyProperties(updatedUser, returnValue);
 
         return returnValue;
 

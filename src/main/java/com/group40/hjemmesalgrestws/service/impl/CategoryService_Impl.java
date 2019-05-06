@@ -1,6 +1,7 @@
 package com.group40.hjemmesalgrestws.service.impl;
 
 import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
+import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.entitiy.CategoryEntity;
 import com.group40.hjemmesalgrestws.repository.CategoryRepository;
 import com.group40.hjemmesalgrestws.service.CategoryService;
@@ -62,6 +63,38 @@ public class CategoryService_Impl implements CategoryService {
             }
         }
         returnValue.add(andet);
+        return returnValue;
+    }
+
+    @Override
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO, String id) {
+        CategoryDTO returnValue = new CategoryDTO();
+
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
+
+        if(!(categoryEntity.getCategoryId() == Integer.parseInt(id))) {
+            //throw new /*NoSuchUser*/Exception;
+            return null;
+        }
+        categoryEntity.setCategoryName(categoryDTO.getCategoryName());
+
+
+        CategoryEntity updatedCategory = categoryRepository.save(categoryEntity);
+        BeanUtils.copyProperties(updatedCategory,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public boolean deleteCategoryById(String id) {
+        boolean returnValue;
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
+
+        if(categoryEntity== null) // TODO throw new usernamenotfoundexception
+            returnValue = false;
+        else
+            returnValue = true;
+        categoryRepository.delete(categoryEntity);
+
         return returnValue;
     }
 }

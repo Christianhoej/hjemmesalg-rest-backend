@@ -4,6 +4,7 @@ import com.group40.hjemmesalgrestws.dtos.AdDTO;
 import com.group40.hjemmesalgrestws.io.models.ads.request.AdDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.ads.response.AdRest;
 import com.group40.hjemmesalgrestws.io.models.category.request.CategoryDetailsModel;
+import com.group40.hjemmesalgrestws.io.models.shared.response.DeleteStatusModel;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
 import com.group40.hjemmesalgrestws.service.AdService;
@@ -41,10 +42,15 @@ public class AdController {
     @PutMapping(path = "/{id}")
     public AdRest updateAd(@RequestBody AdDetailsModel adDetails, @PathVariable String id){
         AdRest returnValue = new AdRest();
-        BeanUtils.copyProperties(adDetails,returnValue);
-        returnValue.setHeader(returnValue.getHeader() + " Dette har ændret sig");
-        returnValue.setAdId(Integer.parseInt(id));
+
+        AdDTO adDTO = new AdDTO();
+        BeanUtils.copyProperties(adDetails,adDTO);
+
+        AdDTO updatedAd = adService.updateAd(adDTO, id);
+        BeanUtils.copyProperties(updatedAd, returnValue);
+
         return returnValue;
+
     }
     @CrossOrigin(origins = "*")
     @GetMapping(path = "/{id}")
@@ -58,12 +64,16 @@ public class AdController {
     }
     @CrossOrigin(origins = "*")
     @DeleteMapping(path = "/{id}")
-    public AdRest deleteAd(@RequestBody UserLoginModel userCreds, @PathVariable String id){
-        userCreds.getEmail();
-        userCreds.getPassword();
-        AdRest returnValue = new AdRest();
-        returnValue.setHeader(returnValue.getHeader() + " Dette er en specifik ad der er blevet slettet");
-        returnValue.setAdId(Integer.parseInt(id));
+    public DeleteStatusModel deleteAd(@PathVariable String id){
+        DeleteStatusModel returnValue = new DeleteStatusModel();
+        returnValue.setOperationName("Delete Ad by adId: " + id + ": ");
+
+        boolean succesDelete = adService.deleteByAdId(id);
+        if(succesDelete)
+            returnValue.setOperationResult("SUCCES");
+        else
+            returnValue.setOperationResult("FAILED");
+
         return returnValue;
     }
     @GetMapping()

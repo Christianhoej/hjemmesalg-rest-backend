@@ -31,13 +31,11 @@ public class UserService_Impl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO userDTO, String id) {
-        System.out.println(userDTO.getEmail() + " DETTE ER EMAIL");
 
         UserDTO returnValue = new UserDTO();
 
         UserEntity userEntity = userRepository.findByEmail(userDTO.getEmail());
 
-        System.out.println(userEntity.getEmail()+ " hentet fra database");
         if(!userEntity.getEmail().equals(userDTO.getEmail())) {
             //throw new /*NoSuchUser*/Exception;
         }
