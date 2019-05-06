@@ -40,6 +40,7 @@ public class CategoryService_Impl implements CategoryService {
         */
     }
 
+
     @Override
     public List<CategoryDTO> getCategories(int page, int limit) {
         List<CategoryDTO> returnValue = new ArrayList<>();
@@ -48,12 +49,19 @@ public class CategoryService_Impl implements CategoryService {
 
         Page<CategoryEntity> categoriesPage = categoryRepository.findAll(pageableRequest);
         List<CategoryEntity> categories = categoriesPage.getContent();
-
+        CategoryDTO andet = new CategoryDTO();
         for(CategoryEntity cat: categories){
             CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(cat, categoryDTO);
-            returnValue.add(categoryDTO);
+            if(categoryDTO.getCategoryName().equals("Andet")){
+                andet = categoryDTO;
+                continue;
+            }
+            else {
+                returnValue.add(categoryDTO);
+            }
         }
+        returnValue.add(andet);
         return returnValue;
     }
 }
