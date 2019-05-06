@@ -12,4 +12,5 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, S
     //@Query("select user from UserEntity user where user.email=:email")
     UserEntity findByEmail(String email);
     UserEntity findUserEntityByEmail(String email);
+    UserEntity findByUserId(String id);
 }

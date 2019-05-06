@@ -21,7 +21,7 @@ public class UserService_Impl implements UserService {
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDTO, userEntity);
-        userEntity.setId(utils.generateUserId(15));
+        userEntity.setUserId(utils.generateUserId(15));
         UserEntity storedUserDetails = userRepository.save(userEntity);
         UserDTO returnValue = new UserDTO();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
@@ -69,6 +69,17 @@ public class UserService_Impl implements UserService {
             //TODO kast en exception.
             return null;
         }
+
+        BeanUtils.copyProperties(userEntity,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDTO getUserByUserID(String id) {
+        UserDTO returnValue = new UserDTO();
+        UserEntity userEntity = userRepository.findByUserId(id);
+        if(userEntity== null) // TODO throw new usernamenotfoundexception
+        return null;
 
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
