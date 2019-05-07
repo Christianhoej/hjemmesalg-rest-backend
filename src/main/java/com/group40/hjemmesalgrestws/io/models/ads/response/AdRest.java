@@ -1,14 +1,25 @@
 package com.group40.hjemmesalgrestws.io.models.ads.response;
 
+import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.io.models.user.reponse.UserRest;
+
 public class AdRest {
     private int adId;
-    private String email;
     private String header;
     private String date;
     private String description;
     private int price;
     private String imageURL;
     private String category;
+    private UserDTO user;
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
 
     public String getCategory() {
         return category;
@@ -26,13 +37,13 @@ public class AdRest {
         this.adId = adId;
     }
 
-    public String getEmail() {
+    /*public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
+    }*/
 
     public String getHeader() {
         return header;
