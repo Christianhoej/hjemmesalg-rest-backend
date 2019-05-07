@@ -1,46 +1,21 @@
-package com.group40.hjemmesalgrestws.entitiy;
+package com.group40.hjemmesalgrestws.io.models;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import com.group40.hjemmesalgrestws.io.models.ads.response.AdRest;
+
 import java.util.List;
 
-@Entity
-@Table(name="users")
-public class UserEntity implements Serializable {
-    private static final long serialVersionUID = 123454L;
-
-    @Id
-    @Column(length = 200)
+public class UserWithAdsRest {
     private String email;
-    @Column(nullable = false, length = 30)
     private String password;
-    @Column(nullable = false, length = 11)
     private String phonenumber;
-    @Column(nullable = false, length = 30)
     private String firstName;
-    @Column(nullable = false, length = 30)
     private String lastName;
-    @Column(nullable = false, length = 5)
     private String zipCode;
-    @Column(nullable = false, length = 15, unique = true)
-    private String userId; //offentligt id til at tilgå brugeren
-    @Column(nullable = false, length = 50)
+    private String userId;
     private String address;
-    @Column(nullable = false, length = 10)
     private String gender;
-    @Column(nullable = false, length = 10)
     private String birthday;
-
-    @OneToMany(mappedBy = "user"/*, targetEntity = AdEntity.class/*, cascade = CascadeType.ALL*/) //Cascade skulle anvendes til at persiste en liste af ads når en user persistes
-    private List<AdEntity> ads;
-
-    public List<AdEntity> getAds() {
-        return ads;
-    }
-
-    public void setAds(List<AdEntity> ads) {
-        this.ads = ads;
-    }
+    private List<AdRest> ads;
 
     public String getEmail() {
         return email;
@@ -120,5 +95,13 @@ public class UserEntity implements Serializable {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public List<AdRest> getAds() {
+        return ads;
+    }
+
+    public void setAds(List<AdRest> ads) {
+        this.ads = ads;
     }
 }

@@ -96,4 +96,15 @@ public class UserService_Impl implements UserService {
 
         return returnValue;
     }
+
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        UserDTO returnValue = new UserDTO();
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if(userEntity== null) // TODO throw new usernamenotfoundexception
+            return null;
+
+        BeanUtils.copyProperties(userEntity,returnValue);
+        return returnValue;
+    }
 }

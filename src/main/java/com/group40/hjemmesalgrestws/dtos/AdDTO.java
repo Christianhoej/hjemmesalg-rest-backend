@@ -5,13 +5,22 @@ import java.io.Serializable;
 public class AdDTO implements Serializable {
     private static final long serialVersionUID = 4231L;
     private int adId;
-    private String email;
+    //private String email;
     private String header;
     private String date;
     private String description;
     private int price;
     private String imageURL;
     private String category;
+    private UserDTO user;
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
 
     public String getCategory() {
         return category;
@@ -28,7 +37,7 @@ public class AdDTO implements Serializable {
     public void setAdId(int adId) {
         this.adId = adId;
     }
-
+/*
     public String getEmail() {
         return email;
     }
@@ -36,7 +45,7 @@ public class AdDTO implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
+*/
     public String getHeader() {
         return header;
     }

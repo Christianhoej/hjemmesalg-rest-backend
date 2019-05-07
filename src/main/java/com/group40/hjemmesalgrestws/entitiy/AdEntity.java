@@ -1,5 +1,7 @@
 package com.group40.hjemmesalgrestws.entitiy;
 
+import com.group40.hjemmesalgrestws.dtos.UserDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,8 +14,8 @@ public class AdEntity implements Serializable {
     @Id
     @GeneratedValue
     private int adId;
-    @Column(nullable = false, length = 100)
-    private String email;
+    //@Column(nullable = false, length = 100)
+    //private String email;
     @Column(nullable = false, length = 100)
     private String header;
     @Column(nullable = false, length = 10)
@@ -25,8 +27,31 @@ public class AdEntity implements Serializable {
     @Column(nullable = false)
     private String imageURL;
 
+    //@Column (nullable = false)
+    @ManyToOne//(targetEntity = UserEntity.class)
+    @JoinColumn(name = "user")
+    private UserEntity user;
+
     @Column
     private String category;
+/*
+    public UserEntity getEmail() {
+        return email;
+    }
+
+    public void setEmail(UserEntity email) {
+        this.email = email;
+    }
+*/
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
 
     public String getCategory() {
         return category;
@@ -43,7 +68,7 @@ public class AdEntity implements Serializable {
     public void setAdId(int adId) {
         this.adId = adId;
     }
-
+/*
     public String getEmail() {
         return email;
     }
@@ -51,7 +76,7 @@ public class AdEntity implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
+*/
     public String getHeader() {
         return header;
     }
