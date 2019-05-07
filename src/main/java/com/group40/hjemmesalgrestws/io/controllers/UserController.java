@@ -20,7 +20,7 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(/*consumes = MediaType.APPLICATION_JSON*/)
-    public UserRest createUser(@RequestBody UserDetailsModel userdetails){
+    public boolean createUser(@RequestBody UserDetailsModel userdetails){
         UserRest returnValue = new UserRest();
 
         UserDTO userDTO = new UserDTO();
@@ -28,7 +28,12 @@ public class UserController {
         UserDTO createdUser = userService.createUser(userDTO);
         BeanUtils.copyProperties(createdUser, returnValue);
 
-        return returnValue;
+        if(returnValue.getEmail()==null){
+            return false;
+        }
+        else
+            return true;
+        // return returnValue;
     }
     @CrossOrigin(origins = "*")
     @GetMapping(path ="/{id}")
