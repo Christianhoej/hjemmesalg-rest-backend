@@ -32,6 +32,7 @@ public class CategoryController {
         return returnValue;
 
     }
+
     @GetMapping()
     @CrossOrigin(origins = "*")
     public List<CategoryRest> getCategories(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value="limit", defaultValue = "25") int limit) {
@@ -45,6 +46,16 @@ public class CategoryController {
             BeanUtils.copyProperties(cat,categoryRest);
             returnValue.add(categoryRest);
         }
+        return returnValue;
+    }
+    @CrossOrigin(origins = "*")
+    @GetMapping(path = "/{id}")
+    public CategoryRest getCategory(@PathVariable String id){
+        CategoryRest returnValue = new CategoryRest();
+
+        CategoryDTO categoryDTO = categoryService.getCategoryById(id);
+        BeanUtils.copyProperties(categoryDTO,returnValue);
+
         return returnValue;
     }
     @PutMapping(path="/{id}")

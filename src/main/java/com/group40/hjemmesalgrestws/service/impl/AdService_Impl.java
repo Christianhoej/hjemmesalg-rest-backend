@@ -1,11 +1,12 @@
 package com.group40.hjemmesalgrestws.service.impl;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.group40.hjemmesalgrestws.dtos.AdDTO;
-import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.entitiy.AdEntity;
+import com.group40.hjemmesalgrestws.entitiy.CategoryEntity;
 import com.group40.hjemmesalgrestws.entitiy.UserEntity;
 import com.group40.hjemmesalgrestws.repository.AdRepository;
+import com.group40.hjemmesalgrestws.repository.CategoryRepository;
 import com.group40.hjemmesalgrestws.repository.UserRepository;
 import com.group40.hjemmesalgrestws.service.AdService;
 import org.modelmapper.ModelMapper;
@@ -15,10 +16,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class AdService_Impl implements AdService {
@@ -27,6 +29,8 @@ public class AdService_Impl implements AdService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     public AdDTO createAd(AdDTO adDetails) {
@@ -63,21 +67,25 @@ public class AdService_Impl implements AdService {
     }
 
     @Override
-    public List<AdDTO> getCategoryAds(int page, int limit, String categoryName) {
-       /* List<AdDTO> returnValue = new ArrayList<>();
-        System.out.println();
-        Pageable pageableRequest = PageRequest.of(page, limit);
+    public List<AdDTO> getCategoryAds(int page, int limit, CategoryDTO category) {
+        List<AdDTO> returnValue = new ArrayList<>();
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(category.getCategoryId());
+        List<AdEntity> allAdsInCategory = categoryEntity.getAds();
+        /*List<AdEntity> ads = new ArrayList<>();
+        for(int i = 0; i<limit; i++){ //TODO implementer med limit og
+            int specificAdNumber = page
+            ads.add(allAdsInCategory.get());
+        }*/
 
-        Page<AdEntity> categoriesPage = adRepository.findAll(pageableRequest);
-        List<AdEntity> ads = categoriesPage.getContent();
 
-        for(AdEntity ad: ads){
-            AdDTO adDTO = new AdDTO();
-            BeanUtils.copyProperties(ad, adDTO);
+        ModelMapper modelMapper = new ModelMapper();
+        for(AdEntity ad: allAdsInCategory){
+            AdDTO adDTO = modelMapper.map(ad,AdDTO.class);
+
             returnValue.add(adDTO);
         }
-        return returnValue;*/
-       return null;
+        return returnValue;
+
     }
 
     @Override
@@ -94,7 +102,6 @@ public class AdService_Impl implements AdService {
 
     @Override
     public AdDTO updateAd(AdDTO adDTO, String id) {
-        //AdDTO returnValue = new AdDTO();
 
         AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
 
@@ -102,17 +109,18 @@ public class AdService_Impl implements AdService {
             //throw new /*NoSuchUser*/Exception;
             return null;
         }
-        adEntity.setCategory(adDTO.getCategory());
+        ModelMapper modelMapper = new ModelMapper();
+        CategoryEntity categoryEntity = modelMapper.map(adDTO.getCategory(), CategoryEntity.class);
+        adEntity.setCategory(categoryEntity);
         adEntity.setDate(adDTO.getDate());
         adEntity.setDescription(adDTO.getDescription());
         adEntity.setHeader(adDTO.getHeader());
         adEntity.setImageURL(adDTO.getImageURL());
         adEntity.setPrice(adDTO.getPrice());
 
-        AdEntity updatedUserDetails = adRepository.save(adEntity);
-        ModelMapper modelMapper = new ModelMapper();
-        AdDTO returnValue = modelMapper.map(updatedUserDetails, AdDTO.class);
-        //BeanUtils.copyProperties(updatedUserDetails,returnValue);
+        AdEntity updatedAdDetails = adRepository.save(adEntity);
+
+        AdDTO returnValue = modelMapper.map(updatedAdDetails, AdDTO.class);
         return returnValue;
     }
 

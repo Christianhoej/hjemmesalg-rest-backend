@@ -1,5 +1,6 @@
 package com.group40.hjemmesalgrestws.io.models.ads.response;
 
+import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.io.models.user.reponse.UserRest;
 
@@ -10,9 +11,18 @@ public class AdRest {
     private String description;
     private int price;
     private String imageURL;
+    //private CategoryDTO category;
     private String category;
     private UserDTO user;
+/*
+    public CategoryDTO getCategory() {
+        return category;
+    }
 
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
+    }
+*/
     public UserDTO getUser() {
         return user;
     }

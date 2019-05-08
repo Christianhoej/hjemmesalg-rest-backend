@@ -1,5 +1,6 @@
 package com.group40.hjemmesalgrestws.entitiy;
 
+import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 
 import javax.persistence.*;
@@ -32,9 +33,19 @@ public class AdEntity implements Serializable {
     @JoinColumn(name = "user")
     private UserEntity user;
 
-    @Column
-    private String category;
-/*
+    @ManyToOne
+    @JoinColumn(name ="category_id")
+    private CategoryEntity category;
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
+
+    /*
     public UserEntity getEmail() {
         return email;
     }
@@ -52,7 +63,7 @@ public class AdEntity implements Serializable {
         this.user = user;
     }
 
-
+/*
     public String getCategory() {
         return category;
     }
@@ -60,7 +71,7 @@ public class AdEntity implements Serializable {
     public void setCategory(String category) {
         this.category = category;
     }
-
+*/
     public int getAdId() {
         return adId;
     }
