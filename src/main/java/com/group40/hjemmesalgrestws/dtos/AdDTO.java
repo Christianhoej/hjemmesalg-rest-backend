@@ -11,8 +11,16 @@ public class AdDTO implements Serializable {
     private String description;
     private int price;
     private String imageURL;
-    private String category;
+    private CategoryDTO category;
     private UserDTO user;
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
+    }
 
     public UserDTO getUser() {
         return user;
@@ -21,7 +29,7 @@ public class AdDTO implements Serializable {
     public void setUser(UserDTO user) {
         this.user = user;
     }
-
+/*
     public String getCategory() {
         return category;
     }
@@ -29,7 +37,7 @@ public class AdDTO implements Serializable {
     public void setCategory(String category) {
         this.category = category;
     }
-
+*/
     public int getAdId() {
         return adId;
     }

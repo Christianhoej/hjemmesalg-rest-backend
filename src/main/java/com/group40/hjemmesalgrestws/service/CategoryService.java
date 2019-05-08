@@ -13,4 +13,8 @@ public interface CategoryService {
     CategoryDTO updateCategory(CategoryDTO categoryDTO, String id);
 
     boolean deleteCategoryById(String id);
+
+    CategoryDTO getCategoryById(String id);
+
+    CategoryDTO getCatgoryByName(String categoryName);
 }

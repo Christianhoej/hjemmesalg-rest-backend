@@ -97,4 +97,26 @@ public class CategoryService_Impl implements CategoryService {
 
         return returnValue;
     }
+
+    @Override
+    public CategoryDTO getCategoryById(String id) {
+        CategoryDTO returnValue = new CategoryDTO();
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
+        if(categoryEntity== null) // TODO throw new categoryNotFound Exception eller brug "Andet"
+            categoryEntity = categoryRepository.findByCategoryName("Andet");
+
+        BeanUtils.copyProperties(categoryEntity,returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public CategoryDTO getCatgoryByName(String categoryName) {
+        CategoryDTO returnValue = new CategoryDTO();
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryName(categoryName);
+        if(categoryEntity== null) // TODO throw new categoryNotFound Exception eller brug "Andet"
+            categoryEntity = categoryRepository.findByCategoryName("Andet");
+
+        BeanUtils.copyProperties(categoryEntity,returnValue);
+        return returnValue;    }
+
 }

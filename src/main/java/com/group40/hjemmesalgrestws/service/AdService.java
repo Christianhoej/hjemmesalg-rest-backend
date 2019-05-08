@@ -1,7 +1,7 @@
 package com.group40.hjemmesalgrestws.service;
 
 import com.group40.hjemmesalgrestws.dtos.AdDTO;
-import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface AdService {
 
     List<AdDTO> getAllAds(int page, int limit);
 
-    List<AdDTO> getCategoryAds(int page, int limit, String categoryName);
+    List<AdDTO> getCategoryAds(int page, int limit, CategoryDTO categoryName);
 
     AdDTO getAdByadId(String id);
 

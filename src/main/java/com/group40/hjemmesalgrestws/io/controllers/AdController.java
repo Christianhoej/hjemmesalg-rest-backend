@@ -1,6 +1,7 @@
 package com.group40.hjemmesalgrestws.io.controllers;
 
 import com.group40.hjemmesalgrestws.dtos.AdDTO;
+import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.io.models.ads.request.AdDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.ads.response.AdRest;
@@ -9,6 +10,7 @@ import com.group40.hjemmesalgrestws.io.models.shared.response.DeleteStatusModel;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
 import com.group40.hjemmesalgrestws.service.AdService;
+import com.group40.hjemmesalgrestws.service.CategoryService;
 import com.group40.hjemmesalgrestws.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -30,33 +32,47 @@ public class AdController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @CrossOrigin(origins = "*")
     @PostMapping()
     public AdRest createAd(@RequestBody AdDetailsModel adDetails){
-        AdRest returnValue = new AdRest();
 
         UserDTO user = userService.getUserByEmail(adDetails.getEmail());
+        CategoryDTO category = categoryService.getCatgoryByName(adDetails.getCategory());
 
         AdDTO adDTO = new AdDTO();
         BeanUtils.copyProperties(adDetails,adDTO);
+        adDTO.setCategory(category);
         adDTO.setUser(user);
 
         AdDTO createdAd = adService.createAd(adDTO);
-        BeanUtils.copyProperties(createdAd,returnValue);
-        //TODO RETURN LIST OF ADS
+        ModelMapper modelMapper = new ModelMapper();
+        AdRest returnValue = modelMapper.map(createdAd, AdRest.class);
+
+        //BeanUtils.copyProperties(createdAd,returnValue);
+
         return returnValue;
 
     }
     @CrossOrigin(origins = "*")
     @PutMapping(path = "/{id}")
     public AdRest updateAd(@RequestBody AdDetailsModel adDetails, @PathVariable String id){
-        AdRest returnValue = new AdRest();
-
+        AdRest returnValue;
+        ModelMapper modelMapper = new ModelMapper();
+        CategoryDTO category = categoryService.getCatgoryByName(adDetails.getCategory());
+        UserDTO user = userService.getUserByEmail(adDetails.getEmail());
         AdDTO adDTO = new AdDTO();
         BeanUtils.copyProperties(adDetails,adDTO);
+        adDTO.setCategory(category);
+        adDTO.setUser(user);
 
         AdDTO updatedAd = adService.updateAd(adDTO, id);
-        BeanUtils.copyProperties(updatedAd, returnValue);
+
+        returnValue = modelMapper.map(updatedAd, AdRest.class);
+        returnValue.setCategory(updatedAd.getCategory().getCategoryName());
+        //BeanUtils.copyProperties(updatedAd, returnValue);
 
         return returnValue;
 
@@ -68,6 +84,7 @@ public class AdController {
 
         AdDTO adDTO = adService.getAdByadId(id);
         BeanUtils.copyProperties(adDTO,returnValue);
+        returnValue.setCategory(adDTO.getCategory().getCategoryName());
 
         return returnValue;
     }
@@ -95,6 +112,7 @@ public class AdController {
         for(AdDTO cat: ads ){
             AdRest adRest = new AdRest();
             BeanUtils.copyProperties(cat,adRest);
+            adRest.setCategory(cat.getCategory().getCategoryName());
             returnValue.add(adRest);
         }
         return returnValue;
@@ -106,28 +124,26 @@ public class AdController {
     @CrossOrigin(origins = "*")
     public List<AdRest> getCategoryAds(@RequestBody CategoryDetailsModel categoryDetailsModel, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value="limit", defaultValue = "25") int limit) {
 
-        if(page>0) page-=1;
+        //if(page>0) page-=1; //TODO skal måske revurderes
         List<AdRest> returnValue = new ArrayList<AdRest>();
-        List<AdDTO> ads = adService.getCategoryAds(page, limit, categoryDetailsModel.getCategoryName());
 
-        for(AdDTO cat: ads ){
-            AdRest adRest = new AdRest();
-            BeanUtils.copyProperties(cat,adRest);
+        CategoryDTO categoryDTO = categoryService.getCatgoryByName(categoryDetailsModel.getCategoryName());
+        System.out.println(categoryDTO.getCategoryId() + " er categoryID");
+        List<AdDTO> ads = adService.getCategoryAds(page, limit, categoryDTO);
+
+        ModelMapper modelMapper = new ModelMapper();
+        for(AdDTO ad: ads ){
+            System.out.println(ad.getHeader() + " " + ad.getUser().getEmail() + " " + ad.getCategory().getCategoryName());
+
+            AdRest adRest;
+            adRest = modelMapper.map(ad, AdRest.class);
             returnValue.add(adRest);
         }
-        return returnValue;
-                /*
-        if(page>0) page-=1;
-        List<CategoryRest> returnValue = new ArrayList<CategoryRest>();
-        List<CategoryDTO> categories = categoryService.getCategories(page, limit);
 
-        for(CategoryDTO cat: categories ){
-            CategoryRest categoryRest = new CategoryRest();
-            BeanUtils.copyProperties(cat,categoryRest);
-            returnValue.add(categoryRest);
-        }
-        return returnValue;*/
+        return returnValue;
+
     }
+
     @GetMapping(path = "/{userId}/userads")
     @CrossOrigin(origins = "*")
     public List<AdRest> getUsersAds(@PathVariable String userId ) {
@@ -142,16 +158,5 @@ public class AdController {
         }
         return returnValue;
 
-                /*
-        if(page>0) page-=1;
-        List<CategoryRest> returnValue = new ArrayList<CategoryRest>();
-        List<CategoryDTO> categories = categoryService.getCategories(page, limit);
-
-        for(CategoryDTO cat: categories ){
-            CategoryRest categoryRest = new CategoryRest();
-            BeanUtils.copyProperties(cat,categoryRest);
-            returnValue.add(categoryRest);
-        }
-        return returnValue;*/
     }
 }
