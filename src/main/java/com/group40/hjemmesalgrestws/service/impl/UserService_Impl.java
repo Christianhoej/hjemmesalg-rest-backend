@@ -2,6 +2,9 @@ package com.group40.hjemmesalgrestws.service.impl;
 
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.entitiy.UserEntity;
+import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
+import com.group40.hjemmesalgrestws.exceptions.ErrorMessages;
+import com.group40.hjemmesalgrestws.exceptions.UserServiceException;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
 import com.group40.hjemmesalgrestws.repository.UserRepository;
 import com.group40.hjemmesalgrestws.service.UserService;
@@ -20,12 +23,9 @@ public class UserService_Impl implements UserService {
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity check = userRepository.findByEmail(userDTO.getEmail());
-        System.out.println("helloooo" + check);
-        if(check!=null){
-            return null;
-            // TODO check for bruger oprettet
-        }
-        else{
+
+        if(check!=null)throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.USERNAME_ALREADY_EXIST_TIP.getErrorFix());
+
             UserEntity userEntity = new UserEntity();
             BeanUtils.copyProperties(userDTO, userEntity);
             userEntity.setUserId(utils.generateUserId(15));
@@ -34,7 +34,7 @@ public class UserService_Impl implements UserService {
             BeanUtils.copyProperties(storedUserDetails, returnValue);
 
             return returnValue;
-        }
+
 
 
     }
@@ -44,11 +44,10 @@ public class UserService_Impl implements UserService {
 
         UserDTO returnValue = new UserDTO();
 
-        UserEntity userEntity = userRepository.findByEmail(userDTO.getEmail());
+        UserEntity userEntity = userRepository.findByUserId(id);
 
-        if(!userEntity.getEmail().equals(userDTO.getEmail())) {
-            //throw new /*NoSuchUser*/Exception;
-        }
+        if(!(userEntity.getEmail().equals(userDTO.getEmail()))) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CHANGE_EMAIL_OR_PUBLIC_USERID.getErrorFix() );
+
         userEntity.setAddress(userDTO.getAddress());
         userEntity.setBirthday(userDTO.getBirthday());
         userEntity.setFirstName(userDTO.getFirstName());
@@ -65,17 +64,13 @@ public class UserService_Impl implements UserService {
 
     @Override
     public UserDTO logInUser(UserLoginModel userLoginModel) {
-        System.out.println(userLoginModel.getEmail() + " DETTE ER EMAIL");
 
         UserDTO returnValue = new UserDTO();
 
         UserEntity userEntity = userRepository.findByEmail(userLoginModel.getEmail());
 
-        System.out.println(userEntity.getEmail()+ " hentet fra database");
         if(!(userEntity.getEmail().equals(userLoginModel.getEmail()) && userEntity.getPassword().equals(userLoginModel.getPassword()))) {
-            //throw new /*NoSuchUser*/Exception;
-            //TODO kast en exception.
-            return null;
+            throw new UserServiceException(ErrorMessages.WRONG_LOGIN_CREDENTIALS.getErrorMessage(), ErrorFixes.WRONG_LOGIN_CREDENTIALS.getErrorFix());
         }
 
         BeanUtils.copyProperties(userEntity,returnValue);
@@ -86,8 +81,7 @@ public class UserService_Impl implements UserService {
     public UserDTO getUserByUserID(String id) {
         UserDTO returnValue = new UserDTO();
         UserEntity userEntity = userRepository.findByUserId(id);
-        if(userEntity== null) // TODO throw new usernamenotfoundexception
-        return null;
+        if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_USERID.getErrorFix());
 
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
@@ -98,9 +92,8 @@ public class UserService_Impl implements UserService {
         boolean returnValue;
         UserEntity userEntity = userRepository.findByUserId(userID);
 
-        if(userEntity== null) // TODO throw new usernamenotfoundexception
-            returnValue = false;
-        else
+        if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_USERID.getErrorFix());
+
             returnValue = true;
         userRepository.delete(userEntity);
 
@@ -111,8 +104,7 @@ public class UserService_Impl implements UserService {
     public UserDTO getUserByEmail(String email) {
         UserDTO returnValue = new UserDTO();
         UserEntity userEntity = userRepository.findByEmail(email);
-        if(userEntity== null) // TODO throw new usernamenotfoundexception
-            return null;
+        if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
 
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;

@@ -3,6 +3,9 @@ package com.group40.hjemmesalgrestws.service.impl;
 import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.entitiy.CategoryEntity;
+import com.group40.hjemmesalgrestws.exceptions.CategoryServiceException;
+import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
+import com.group40.hjemmesalgrestws.exceptions.ErrorMessages;
 import com.group40.hjemmesalgrestws.repository.CategoryRepository;
 import com.group40.hjemmesalgrestws.service.CategoryService;
 import org.springframework.beans.BeanUtils;
@@ -23,22 +26,16 @@ public class CategoryService_Impl implements CategoryService {
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDetails) {
-        CategoryEntity categoryEntity = new CategoryEntity();
+
+        CategoryEntity categoryEntity = categoryRepository.findByCategoryName(categoryDetails.getCategoryName());
+        if(categoryEntity!=null) throw new CategoryServiceException(ErrorMessages.CATEGORY_ALREADY_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_ALREADY_EXIST.getErrorFix());
+        categoryEntity = new CategoryEntity();
         BeanUtils.copyProperties(categoryDetails, categoryEntity);
         CategoryEntity storedCategoryDetails = categoryRepository.save(categoryEntity);
         CategoryDTO returnValue = new CategoryDTO();
         BeanUtils.copyProperties(storedCategoryDetails, returnValue);
         return returnValue;
 
-        /*
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDTO, userEntity);
-        UserEntity storedUserDetails = userRepository.save(userEntity);
-        UserDTO returnValue = new UserDTO();
-        BeanUtils.copyProperties(storedUserDetails, returnValue);
-
-        return returnValue;
-        */
     }
 
 
@@ -72,10 +69,7 @@ public class CategoryService_Impl implements CategoryService {
 
         CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
 
-        if(!(categoryEntity.getCategoryId() == Integer.parseInt(id))) {
-            //throw new /*NoSuchUser*/Exception;
-            return null;
-        }
+        if(categoryEntity==null) throw new CategoryServiceException(ErrorMessages.CATEGORY_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_DOES_NOT_EXIST.getErrorFix());
         categoryEntity.setCategoryName(categoryDTO.getCategoryName());
 
 
@@ -86,24 +80,19 @@ public class CategoryService_Impl implements CategoryService {
 
     @Override
     public boolean deleteCategoryById(String id) {
-        boolean returnValue;
         CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
 
-        if(categoryEntity== null) // TODO throw new usernamenotfoundexception
-            returnValue = false;
-        else
-            returnValue = true;
+        if(categoryEntity== null)  throw new CategoryServiceException(ErrorMessages.CATEGORY_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_BY_ID_DOES_NOT_EXIST.getErrorFix());
         categoryRepository.delete(categoryEntity);
 
-        return returnValue;
+        return true;
     }
 
     @Override
     public CategoryDTO getCategoryById(String id) {
         CategoryDTO returnValue = new CategoryDTO();
         CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
-        if(categoryEntity== null) // TODO throw new categoryNotFound Exception eller brug "Andet"
-            categoryEntity = categoryRepository.findByCategoryName("Andet");
+        if(categoryEntity== null) throw new CategoryServiceException(ErrorMessages.CATEGORY_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_BY_ID_DOES_NOT_EXIST.getErrorFix());
 
         BeanUtils.copyProperties(categoryEntity,returnValue);
         return returnValue;
@@ -113,8 +102,7 @@ public class CategoryService_Impl implements CategoryService {
     public CategoryDTO getCatgoryByName(String categoryName) {
         CategoryDTO returnValue = new CategoryDTO();
         CategoryEntity categoryEntity = categoryRepository.findByCategoryName(categoryName);
-        if(categoryEntity== null) // TODO throw new categoryNotFound Exception eller brug "Andet"
-            categoryEntity = categoryRepository.findByCategoryName("Andet");
+        if(categoryEntity== null)  throw new CategoryServiceException(ErrorMessages.CATEGORY_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_BY_NAME_DOES_NOT_EXIST.getErrorFix());
 
         BeanUtils.copyProperties(categoryEntity,returnValue);
         return returnValue;    }

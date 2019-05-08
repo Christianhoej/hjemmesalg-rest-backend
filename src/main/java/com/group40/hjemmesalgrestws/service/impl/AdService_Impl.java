@@ -5,6 +5,10 @@ import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.entitiy.AdEntity;
 import com.group40.hjemmesalgrestws.entitiy.CategoryEntity;
 import com.group40.hjemmesalgrestws.entitiy.UserEntity;
+import com.group40.hjemmesalgrestws.exceptions.AdServiceException;
+import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
+import com.group40.hjemmesalgrestws.exceptions.ErrorMessages;
+import com.group40.hjemmesalgrestws.exceptions.UserServiceException;
 import com.group40.hjemmesalgrestws.repository.AdRepository;
 import com.group40.hjemmesalgrestws.repository.CategoryRepository;
 import com.group40.hjemmesalgrestws.repository.UserRepository;
@@ -36,10 +40,8 @@ public class AdService_Impl implements AdService {
     public AdDTO createAd(AdDTO adDetails) {
         ModelMapper modelMapper = new ModelMapper();
         AdEntity adEntity = modelMapper.map(adDetails, AdEntity.class);
-        //BeanUtils.copyProperties(adDetails, adEntity);
         AdEntity storedAdDetails = adRepository.save(adEntity);
         AdDTO returnValue = modelMapper.map(storedAdDetails, AdDTO.class);
-        //BeanUtils.copyProperties(storedAdDetails, returnValue);
 
         return returnValue;
 
@@ -58,8 +60,8 @@ public class AdService_Impl implements AdService {
         for(AdEntity ad: ads){
             ModelMapper modelMapper = new ModelMapper();
             AdDTO adDTO =  modelMapper.map(ad, AdDTO.class);
-            /*AdDTO adDTO = new AdDTO();
-            BeanUtils.copyProperties(ad, adDTO);*/
+
+
             returnValue.add(adDTO);
         }
         return returnValue;
@@ -72,7 +74,7 @@ public class AdService_Impl implements AdService {
         CategoryEntity categoryEntity = categoryRepository.findByCategoryId(category.getCategoryId());
         List<AdEntity> allAdsInCategory = categoryEntity.getAds();
         /*List<AdEntity> ads = new ArrayList<>();
-        for(int i = 0; i<limit; i++){ //TODO implementer med limit og
+        for(int i = 0; i<limit; i++){ //TODO implementer med limit og page hvis det ønskes
             int specificAdNumber = page
             ads.add(allAdsInCategory.get());
         }*/
@@ -92,8 +94,8 @@ public class AdService_Impl implements AdService {
     public AdDTO getAdByadId(String id) {
         //AdDTO returnValue = new AdDTO();
         AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
-        if(adEntity== null) // TODO throw new usernamenotfoundexception
-            return null;
+        if(adEntity== null) throw new AdServiceException(ErrorMessages.AD_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.AD_BY_ID_DOES_NOT_EXIST.getErrorFix());
+
         ModelMapper modelMapper = new ModelMapper();
         AdDTO returnValue = modelMapper.map(adEntity, AdDTO.class);
         BeanUtils.copyProperties(adEntity,returnValue);
@@ -105,10 +107,9 @@ public class AdService_Impl implements AdService {
 
         AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
 
-        if(!(adEntity.getAdId() == Integer.parseInt(id))) {
-            //throw new /*NoSuchUser*/Exception;
-            return null;
-        }
+        if(adEntity==null)throw new AdServiceException(ErrorMessages.AD_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.AD_BY_ID_DOES_NOT_EXIST.getErrorFix());
+
+
         ModelMapper modelMapper = new ModelMapper();
         CategoryEntity categoryEntity = modelMapper.map(adDTO.getCategory(), CategoryEntity.class);
         adEntity.setCategory(categoryEntity);
@@ -126,16 +127,13 @@ public class AdService_Impl implements AdService {
 
     @Override
     public boolean deleteByAdId(String id) {
-        boolean returnValue;
         AdEntity adEntity = adRepository.findByAdId(Integer.parseInt(id));
 
-        if(adEntity== null) // TODO throw new adNotFoundException
-            returnValue = false;
-        else
-            returnValue = true;
+        if(adEntity== null) throw new AdServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.AD_BY_ID_DOES_NOT_EXIST.getErrorFix());
+
         adRepository.delete(adEntity);
 
-        return returnValue;    }
+        return true;    }
 
     @Override
     public List<AdDTO> getUserAds(String email) {
@@ -149,9 +147,6 @@ public class AdService_Impl implements AdService {
             ModelMapper modelMapper = new ModelMapper();
             AdDTO ad = modelMapper.map(adEntity, AdDTO.class);
             returnValue.add(ad);
-        }
-        for(AdDTO dto : returnValue){
-            System.out.println(dto.getCategory() + " " + dto.getUser().getEmail());
         }
 
         return returnValue;
