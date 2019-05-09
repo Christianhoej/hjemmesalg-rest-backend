@@ -11,9 +11,16 @@ import java.util.List;
 
 public interface AdRepository extends PagingAndSortingRepository<AdEntity, Integer> {
     AdEntity findByAdId(int id);
+    List<AdEntity> findAll();
+    int countAllBy();
+    int countAdEntitiesByCategory(int categoryId);
+
 
     //@Query("select AdEntity from ads where ads.category =: id")
     List<AdEntity> findAllByCategoryIsContaining(int id);
+
+
+    //int getAdsCount();
 
     //List<AdEntity> findAllByCategory();
     //AdEntity findAllByCategory(AdEntity pageable, String category);

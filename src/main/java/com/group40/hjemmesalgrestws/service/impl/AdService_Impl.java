@@ -9,6 +9,7 @@ import com.group40.hjemmesalgrestws.exceptions.AdServiceException;
 import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
 import com.group40.hjemmesalgrestws.exceptions.ErrorMessages;
 import com.group40.hjemmesalgrestws.exceptions.UserServiceException;
+import com.group40.hjemmesalgrestws.io.models.administrator.response.CategoryAdStatsRest;
 import com.group40.hjemmesalgrestws.repository.AdRepository;
 import com.group40.hjemmesalgrestws.repository.CategoryRepository;
 import com.group40.hjemmesalgrestws.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -149,6 +151,25 @@ public class AdService_Impl implements AdService {
             returnValue.add(ad);
         }
 
+        return returnValue;
+    }
+
+    @Override
+    public int getAdsCount() {
+        return adRepository.countAllBy();
+    }
+
+    @Override
+    public List<CategoryAdStatsRest> getCountOfAdsByCategory() {
+        List<CategoryAdStatsRest> returnValue = new ArrayList<CategoryAdStatsRest>();
+        List<CategoryEntity> categories = (List<CategoryEntity>) categoryRepository.findAll();
+
+                for(CategoryEntity cat : categories){
+                    CategoryAdStatsRest c = new CategoryAdStatsRest();
+                    c.setCategoryName(cat.getCategoryName());
+                    c.setNumbers(cat.getAds().size());
+                    returnValue.add(c);
+        }
         return returnValue;
     }
 

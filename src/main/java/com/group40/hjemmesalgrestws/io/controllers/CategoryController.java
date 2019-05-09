@@ -45,7 +45,9 @@ public class CategoryController {
             CategoryRest categoryRest = new CategoryRest();
             BeanUtils.copyProperties(cat,categoryRest);
             returnValue.add(categoryRest);
+            System.out.println(categoryRest.getCategoryName()+ categoryRest.getCategoryId());
         }
+
         return returnValue;
     }
     @CrossOrigin(origins = "*")

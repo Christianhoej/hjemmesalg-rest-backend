@@ -5,7 +5,7 @@ public enum ErrorFixes {
 
     WRONG_LOGIN_CREDENTIALS("Forkert brugernavn eller kodeord."),
 
-    CATEGORY_DOES_NOT_EXIST("Kategorien findes ikke."),
+    CATEGORY_DOES_NOT_EXIST("Prøv at angive et andet kategori id."),
 
     CHANGE_EMAIL_OR_PUBLIC_USERID("Email eller brugerID passer ikke sammen, prøv at skifte den ene"),
 

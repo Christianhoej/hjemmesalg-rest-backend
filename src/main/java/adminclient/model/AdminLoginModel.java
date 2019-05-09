@@ -1,9 +1,13 @@
-package com.group40.hjemmesalgrestws.io.models.administrator.response;
+package adminclient.model;
 
-public class AdminRest {
+public class AdminLoginModel {
     private String email;
     private String password;
-    private String adminID;
+
+    public AdminLoginModel(String username, String password) {
+        this.email = username;
+        this.password = password;
+    }
 
     public String getEmail() {
         return email;
@@ -19,13 +23,5 @@ public class AdminRest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAdminID() {
-        return adminID;
-    }
-
-    public void setAdminID(String adminID) {
-        this.adminID = adminID;
     }
 }
