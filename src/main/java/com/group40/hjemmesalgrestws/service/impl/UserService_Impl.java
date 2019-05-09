@@ -109,4 +109,9 @@ public class UserService_Impl implements UserService {
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
     }
+
+    @Override
+    public int getUsersCount() {
+        return userRepository.countAllBy();
+    }
 }

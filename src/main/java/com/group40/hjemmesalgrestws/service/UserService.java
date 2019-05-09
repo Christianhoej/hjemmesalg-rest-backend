@@ -16,4 +16,6 @@ public interface UserService {
     boolean deleteUserById(String userID);
 
     UserDTO getUserByEmail(String email);
+
+    int getUsersCount();
 }

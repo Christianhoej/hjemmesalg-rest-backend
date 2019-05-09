@@ -43,12 +43,14 @@ public class CategoryService_Impl implements CategoryService {
     public List<CategoryDTO> getCategories(int page, int limit) {
         List<CategoryDTO> returnValue = new ArrayList<>();
 
-        Pageable pageableRequest = PageRequest.of(page, limit);
+        /*Pageable pageableRequest = PageRequest.of(page, limit);
 
         Page<CategoryEntity> categoriesPage = categoryRepository.findAll(pageableRequest);
-        List<CategoryEntity> categories = categoriesPage.getContent();
+        List<CategoryEntity> categories = categoriesPage.getContent();*/
+
+        List<CategoryEntity> categoryEntities = categoryRepository.findAllBy();
         CategoryDTO andet = new CategoryDTO();
-        for(CategoryEntity cat: categories){
+        for(CategoryEntity cat: categoryEntities){
             CategoryDTO categoryDTO = new CategoryDTO();
             BeanUtils.copyProperties(cat, categoryDTO);
             if(categoryDTO.getCategoryName().equals("Andet")){
@@ -59,6 +61,7 @@ public class CategoryService_Impl implements CategoryService {
                 returnValue.add(categoryDTO);
             }
         }
+        if(andet.getCategoryName()!=null)
         returnValue.add(andet);
         return returnValue;
     }
