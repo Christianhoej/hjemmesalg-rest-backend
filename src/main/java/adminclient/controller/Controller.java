@@ -280,7 +280,72 @@ public class Controller {
 
 
 
-    public String deleteCategory() {
-        return null;
+    public String deleteCategory(int id) {
+        String line;
+        StringBuffer responseContent = new StringBuffer();
+        BufferedReader bufferedReader;
+        try {
+            JSONObject requestJson;// = new JsonObject();
+            String url = "http://localhost:8080/Homely-ws/category/" + id;
+
+            //method call for generating json
+
+            URL myurl;
+
+            myurl = new URL(url);
+            HttpURLConnection con = (HttpURLConnection)myurl.openConnection();
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            con.setRequestMethod("DELETE");
+
+            con.setRequestProperty("Content-Type", "application/json;charset=utf8");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Method", "DELETE");
+            OutputStream os = con.getOutputStream();
+            os.close();
+
+
+            //StringBuilder sb = new StringBuilder();
+            int HttpResult =con.getResponseCode();
+
+            if(HttpResult !=HttpURLConnection.HTTP_OK){
+                bufferedReader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                while ((line = bufferedReader.readLine()) != null) {
+                    responseContent.append(line);
+                }
+                bufferedReader.close();
+            }
+            else{
+                bufferedReader =  new BufferedReader((new InputStreamReader(con.getInputStream())));
+                while((line = bufferedReader.readLine()) != null) {
+                    responseContent.append(line);
+                }
+            }
+
+            String returnValue;
+            if(HttpResult ==HttpURLConnection.HTTP_OK)
+                returnValue = ReadSingleJsonDeleteCategoryResponse(responseContent.toString());
+            else
+                returnValue = ReadJsonCategoryErrorMessage(responseContent.toString());
+            con.disconnect();
+
+            return returnValue;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Noget gik galt. Prøv igen senere";
+    }
+
+    private String ReadSingleJsonDeleteCategoryResponse(String response) {
+        JSONObject jsonObject = new JSONObject(response);
+        String operationName = jsonObject.getString("operationName");
+        String operationResult = jsonObject.getString("operationResult");
+        String returnValue = operationName + "\n" + operationResult;
+        return returnValue;
     }
 }

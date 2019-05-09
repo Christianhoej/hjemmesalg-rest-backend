@@ -80,12 +80,15 @@ public class Main {
         }
 
     }
-
-    private static void handleCategories(Scanner scanner) {
+    private static void categoryMenuMessage(){
         System.out.println("*----------------*\n" +
                            "|  Kategorimenu  |\n" +
                            "*----------------*\n");
         showCategoryOpportunities();
+    }
+
+    private static void handleCategories(Scanner scanner) {
+            categoryMenuMessage();
         while(true) {
 
 
@@ -104,7 +107,8 @@ public class Main {
                     System.out.println(output);
                     break;
                 case 3:
-                    output = c.deleteCategory();
+
+                    output = handleDeleteCategory(scanner);
                     System.out.println(output);
 
                     break;
@@ -112,7 +116,7 @@ public class Main {
                     showCategoryOpportunities();
 
                     break;
-                case 5:
+                case -1:
                     return;
                 default:
                     System.out.println("Muligheden " + userInput + " findes ikke. Prøv igen.\n");
@@ -121,18 +125,46 @@ public class Main {
         }
     }
 
-    private static String handleUpdateCategory(Scanner scanner) {
+    private static String handleDeleteCategory(Scanner scanner) {
         while(true) {
-            System.out.println("Skriv id på kategori du ønsker at opdater: ");
+            System.out.println("For at komme tilbage til kategori-menuen, da kan du skrive \"-1\"");
+            System.out.println("Skriv id på kategori du ønsker at slette: ");
             scanner = new Scanner(System.in);
             int id = scanner.nextInt();
+            if(id==-1) break;
+            String returnValue = c.deleteCategory(id);
+
+            if(!returnValue.contains("Kategorien findes ikke"))
+                return returnValue;
+
+            System.out.println(returnValue);
+
+        }
+        categoryMenuMessage();
+        return "";
+    }
+
+    private static String handleUpdateCategory(Scanner scanner) {
+        while(true) {
+            System.out.println("For at komme tilbage til kategori-menuen, da kan du skrive \"-1\"");
+            System.out.println("Skriv id på kategori du ønsker at opdatere: ");
+            scanner = new Scanner(System.in);
+            int id = scanner.nextInt();
+            if(id == -1) break;
             System.out.println("Skriv hvad du ønsker at ændre kategorinavnet til: ");
             scanner = new Scanner(System.in);
             String categoryName = scanner.nextLine();
+            if(categoryName.equals("-1")) break;
             String returnValue = c.updateCategory(id, categoryName);
+
+            if(!returnValue.contains("Kategorien findes ikke"))
             return returnValue;
 
+            System.out.println(returnValue);
+
         }
+        categoryMenuMessage();
+        return "";
     }
 
     private static void showCategoryOpportunities() {
@@ -141,7 +173,7 @@ public class Main {
         System.out.println("Tryk 2 for at redigere en eksisterende kategori: ");
         System.out.println("Tryk 3 for at slette en kategori: ");
         System.out.println("Tryk 4 for at se muligheder igen.");
-        System.out.println("Tryk 5 for at gå tilbage til hovedmenuen: ");
+        System.out.println("Tryk -1 for at gå tilbage til hovedmenuen: ");
 
     }
 
