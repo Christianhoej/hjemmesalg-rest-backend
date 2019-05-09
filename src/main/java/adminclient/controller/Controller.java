@@ -1,5 +1,6 @@
 package adminclient.controller;
 
+import adminclient.model.UrlConstants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,26 +10,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Controller {
-    public static void main(String[] args) {
-        Controller c = new Controller();
-        try {
-            //c.getStatistics();
-            c.attemptLogin("s175129","Kode2405");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    //private HttpURLConnection connection;
 
     public boolean attemptLogin(String username, String password) throws IOException {
         //TODO Lav HTTPREQUEST TIL SERVER
 
-        String line;
-        StringBuffer responseContent = new StringBuffer();
-        BufferedReader bufferedReader;
-
         JSONObject requestJson;// = new JsonObject();
-        String url = "http://localhost:8080/Homely-ws/admin";
+        String url = UrlConstants.ADMIN_LOGIN.getUrl();
 
         //method call for generating json
 
@@ -50,19 +37,7 @@ public class Controller {
         int HttpResult =con.getResponseCode();
         if(HttpResult ==HttpURLConnection.HTTP_OK)//{
             return true;
-            /*BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(),"utf-8"));
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            br.close();
-            System.out.println(""+sb.toString());*/
-
-        /*}else{
-            System.out.println(con.getResponseCode());
-            System.out.println(con.getResponseMessage());
-        }*/
         return false;
 
     }
@@ -83,7 +58,7 @@ public class Controller {
         String line;
         StringBuffer responseContent = new StringBuffer();
         BufferedReader bufferedReader;
-        URL url = new URL("http://localhost:8080/Homely-ws/admin");
+        URL url = new URL(UrlConstants.ADMIN_STATISTICS.getUrl());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         //Request setup
@@ -140,7 +115,7 @@ public class Controller {
         BufferedReader bufferedReader;
 
         try {
-            URL url = new URL("http://localhost:8080/Homely-ws/category");
+            URL url = new URL(UrlConstants.CATEGORY_GET_ALL.getUrl());
             HttpURLConnection connection = null;
             connection = (HttpURLConnection) url.openConnection();
             //Request setup
@@ -195,7 +170,7 @@ public class Controller {
         BufferedReader bufferedReader;
         try {
         JSONObject requestJson;// = new JsonObject();
-        String url = "http://localhost:8080/Homely-ws/category/" + id;
+        String url = UrlConstants.CATEGORY_UPDATE_BASE.getUrl() + id;
 
         //method call for generating json
 
@@ -235,9 +210,9 @@ public class Controller {
 
             String returnValue;
             if(HttpResult ==HttpURLConnection.HTTP_OK)
-                returnValue = ReadSingleJsonCategoryResponse(responseContent.toString());
+                returnValue = readSingleJsonCategoryResponse(responseContent.toString());
             else
-                returnValue = ReadJsonCategoryErrorMessage(responseContent.toString());
+                returnValue = readJsonCategoryErrorMessage(responseContent.toString());
             con.disconnect();
 
             return returnValue;
@@ -253,7 +228,7 @@ public class Controller {
 
     }
 
-    private String ReadJsonCategoryErrorMessage(String errorResponse) {
+    private String readJsonCategoryErrorMessage(String errorResponse) {
         String returnValue = "";
         JSONObject jsonObject = new JSONObject(errorResponse);
         returnValue += jsonObject.getString("message") + "\n";
@@ -261,7 +236,7 @@ public class Controller {
         return returnValue;
     }
 
-    private String ReadSingleJsonCategoryResponse(String responseBody) {
+    private String readSingleJsonCategoryResponse(String responseBody) {
         String returnValue = "";
         JSONObject jsonObject = new JSONObject(responseBody);
         int id = jsonObject.getInt("categoryId");
@@ -286,7 +261,7 @@ public class Controller {
         BufferedReader bufferedReader;
         try {
             JSONObject requestJson;// = new JsonObject();
-            String url = "http://localhost:8080/Homely-ws/category/" + id;
+            String url = UrlConstants.CATEGORY_DELETE.getUrl() + id;
 
             //method call for generating json
 
@@ -324,9 +299,9 @@ public class Controller {
 
             String returnValue;
             if(HttpResult ==HttpURLConnection.HTTP_OK)
-                returnValue = ReadSingleJsonDeleteCategoryResponse(responseContent.toString());
+                returnValue = readSingleJsonDeleteCategoryResponse(responseContent.toString());
             else
-                returnValue = ReadJsonCategoryErrorMessage(responseContent.toString());
+                returnValue = readJsonCategoryErrorMessage(responseContent.toString());
             con.disconnect();
 
             return returnValue;
@@ -341,11 +316,74 @@ public class Controller {
         return "Noget gik galt. Prøv igen senere";
     }
 
-    private String ReadSingleJsonDeleteCategoryResponse(String response) {
+    private String readSingleJsonDeleteCategoryResponse(String response) {
         JSONObject jsonObject = new JSONObject(response);
         String operationName = jsonObject.getString("operationName");
         String operationResult = jsonObject.getString("operationResult");
         String returnValue = operationName + "\n" + operationResult;
+        return returnValue;
+    }
+
+    public String createCategory(String name) {
+        String line;
+        StringBuffer responseContent = new StringBuffer();
+        BufferedReader bufferedReader;
+        try {
+            JSONObject requestJson;// = new JsonObject();
+            String url = UrlConstants.CATEGORY_CREATION.getUrl();
+
+            //method call for generating json
+
+            requestJson = generateCategoryCreationJson(name);
+            URL myurl = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            con.setRequestMethod("POST");
+
+            con.setRequestProperty("Content-Type", "application/json;charset=utf8");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Method", "POST");
+            OutputStream os = con.getOutputStream();
+            os.write(requestJson.toString().getBytes("UTF-8"));
+            os.close();
+
+
+            //StringBuilder sb = new StringBuilder();
+            int HttpResult = con.getResponseCode();
+            if(HttpResult !=HttpURLConnection.HTTP_OK){
+                bufferedReader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                while ((line = bufferedReader.readLine()) != null) {
+                    responseContent.append(line);
+                }
+                bufferedReader.close();
+            }
+            else{
+                bufferedReader =  new BufferedReader((new InputStreamReader(con.getInputStream())));
+                while((line = bufferedReader.readLine()) != null) {
+                    responseContent.append(line);
+                }
+            }
+            String returnValue;
+            if (HttpResult == HttpURLConnection.HTTP_OK)
+                 returnValue = readSingleJsonCategoryResponse(responseContent.toString());
+                         else
+                returnValue = readJsonCategoryErrorMessage(responseContent.toString());
+                return returnValue;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Noget gik galt. Prøv igen senere.";
+
+    }
+
+    private JSONObject generateCategoryCreationJson(String name) {
+        JSONObject returnValue = new JSONObject();
+        returnValue.put("categoryName", name);
         return returnValue;
     }
 }

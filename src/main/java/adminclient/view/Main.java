@@ -56,7 +56,7 @@ public class Main {
 
             System.out.println("Tryk 2 for at håndtere kategorier");
 
-            System.out.println("Tryk 3 for at logge ud og afslutte programmet.");
+            System.out.println("Tryk -1 for at logge ud og afslutte programmet.");
 
 
             int userInput = scanner.nextInt();
@@ -67,7 +67,7 @@ public class Main {
                 case 2:
                      handleCategories(scanner);
                     break;
-                case 3:
+                case -1:
                     return;
 
                 default:
@@ -114,7 +114,11 @@ public class Main {
                     break;
                 case 4:
                     showCategoryOpportunities();
-
+                    categoryMenuMessage();
+                    break;
+                case 5:
+                    output = createNewCategory(scanner);
+                    System.out.println(output);
                     break;
                 case -1:
                     return;
@@ -123,6 +127,24 @@ public class Main {
                     showCategoryOpportunities();
             }
         }
+    }
+
+    private static String createNewCategory(Scanner scanner) {
+        while(true) {
+            System.out.println("For at komme tilbage til kategori-menuen, da kan du skrive \"-1\"");
+            System.out.println("Skriv navn på den kategori du ønsker at oprette: ");
+            scanner = new Scanner(System.in);
+            String name = scanner.nextLine();
+            if(name.equals("-1")) break;
+            String returnValue = c.createCategory(name);
+            if(!returnValue.contains("Kategorien findes ikke"))
+                return returnValue;
+
+            System.out.println(returnValue);
+
+        }
+        categoryMenuMessage();
+        return "";
     }
 
     private static String handleDeleteCategory(Scanner scanner) {
@@ -173,6 +195,7 @@ public class Main {
         System.out.println("Tryk 2 for at redigere en eksisterende kategori: ");
         System.out.println("Tryk 3 for at slette en kategori: ");
         System.out.println("Tryk 4 for at se muligheder igen.");
+        System.out.println("Tryk 5 for at oprette en kategori.");
         System.out.println("Tryk -1 for at gå tilbage til hovedmenuen: ");
 
     }
