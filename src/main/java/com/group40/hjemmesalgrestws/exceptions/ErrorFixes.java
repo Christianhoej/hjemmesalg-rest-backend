@@ -19,7 +19,7 @@ public enum ErrorFixes {
 
     CATEGORY_BY_NAME_DOES_NOT_EXIST("Prøv at søge på en anden kategori"),
 
-    AD_BY_ID_DOES_NOT_EXIST("Prøv at skifte ID for at finde det salgsopslag du leder efter.");
+    AD_BY_ID_DOES_NOT_EXIST("Prøv at skifte ID for at finde den annonce du leder efter.");
 
     private String errorFix;
     ErrorFixes(String errorFix) {

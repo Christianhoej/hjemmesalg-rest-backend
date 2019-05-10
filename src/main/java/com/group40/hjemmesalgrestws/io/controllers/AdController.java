@@ -42,13 +42,12 @@ public class AdController {
 
     @CrossOrigin(origins = "*")
     @PostMapping()
-    @ApiOperation(value = "Laver nyt salgsopslag",
-    notes = "Returnerer informationer på netop oprettede salgsopslag. Fejler hvis der ikke findes en bruger til det tilhørende opslag. (email)")
+    @ApiOperation(value = "Laver ny annonce",
+    notes = "Returnerer informationer på netop oprettede annonce. Fejler hvis der ikke findes en bruger til den tilhørende annonce. (email)")
     public AdRest createAd(@RequestBody AdDetailsModel adDetails){
 
         UserDTO user = userService.getUserByEmail(adDetails.getEmail());
         CategoryDTO category = categoryService.getCatgoryByName(adDetails.getCategory());
-
         AdDTO adDTO = new AdDTO();
         BeanUtils.copyProperties(adDetails,adDTO);
         adDTO.setCategory(category);
@@ -64,8 +63,8 @@ public class AdController {
     @CrossOrigin(origins = "*")
     @PutMapping(path = "/{id}")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en instans som ikke findes")})
-    @ApiOperation(value = "Opdaterer eksisterende salgsopslag",
-            notes = "Returnerer informationer på netop opdaterede salgsopslag. Fejler hvis der salgsopslaget (med id) ikke findes")
+    @ApiOperation(value = "Opdaterer eksisterende annonce",
+            notes = "Returnerer informationer på netop opdaterede annonce. Fejler hvis den annonce (med id) ikke findes")
     public AdRest updateAd(@RequestBody AdDetailsModel adDetails, @PathVariable String id){
         AdRest returnValue;
         ModelMapper modelMapper = new ModelMapper();
@@ -87,8 +86,8 @@ public class AdController {
     @CrossOrigin(origins = "*")
     @GetMapping(path = "/{id}")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en instans som ikke findes")})
-    @ApiOperation(value = "Hent et specifikt salgsopslag",
-            notes = "Returnerer informationer på bestemt salgsopslag. Fejler hvis ikke salgsopsalget findes")
+    @ApiOperation(value = "Hent en specifikt annonce",
+            notes = "Returnerer informationer på bestemt annonce. Fejler hvis ikke annoncen findes")
     public AdRest getAd(@PathVariable String id){
         AdRest returnValue = new AdRest();
 
@@ -101,8 +100,8 @@ public class AdController {
     @CrossOrigin(origins = "*")
     @DeleteMapping(path = "/{id}")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en instans som ikke findes")})
-    @ApiOperation(value = "Sletter eksisterende salgsopslag",
-            notes = "Returnerer informationer på status for det slettede salgsopslag. Fejler hvis ikke der findes et salgsopslag med angivne id.")
+    @ApiOperation(value = "Sletter eksisterende annonce",
+            notes = "Returnerer informationer på status for den slettede annonce. Fejler hvis ikke der findes en annonce med angivne id.")
     public DeleteStatusModel deleteAd(@PathVariable String id){
         DeleteStatusModel returnValue = new DeleteStatusModel();
         returnValue.setOperationName("Delete Ad by adId: " + id + ": ");
@@ -117,8 +116,8 @@ public class AdController {
     }
     @GetMapping()
     @CrossOrigin(origins = "*")
-    @ApiOperation(value = "Henter en page (bestemt mængde) med salgsopslag",
-            notes = "Returnerer en liste med salgsopslag (ufiltrerede resultater). Returnerer en tom list hvis ikke der findes nogle opslag.")
+    @ApiOperation(value = "Henter en page (bestemt mængde) med annonce",
+            notes = "Returnerer en liste med annoncer (ufiltrerede resultater). Returnerer en tom list hvis ikke der findes nogle annoncer.")
     public List<AdRest> getAllAds(@RequestParam(value="page",defaultValue="0") int page, @RequestParam(value="limit",defaultValue="25") int limit) {
         if(page>0) page-=1;
         List<AdRest> returnValue = new ArrayList<AdRest>();
@@ -139,7 +138,7 @@ public class AdController {
     @CrossOrigin(origins = "*")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en kategori som ikke findes")})
     @ApiOperation(value = "Hent alle kategorier i en bestemt kategori",
-            notes = "Returnerer en liste med alle salgsopslag i en bestemt kategori. Fejler hvis der ikke findes en kategori, som den der angives i requestbody (categoryDetailsModel).")
+            notes = "Returnerer en liste med alle annoncer i en bestemt kategori. Fejler hvis der ikke findes en kategori, som den der angives i requestbody (categoryDetailsModel).")
 
     public List<AdRest> getCategoryAds(@PathVariable String categoryName,/*@RequestBody CategoryDetailsModel categoryDetailsModel,*/ @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value="limit", defaultValue = "25") int limit) {
 
@@ -148,12 +147,10 @@ public class AdController {
         List<AdRest> returnValue = new ArrayList<AdRest>();
 
         CategoryDTO categoryDTO = categoryService.getCatgoryByName(categoryName);
-        System.out.println(categoryDTO.getCategoryId() + " er categoryID");
         List<AdDTO> ads = adService.getCategoryAds(page, limit, categoryDTO);
 
         ModelMapper modelMapper = new ModelMapper();
         for(AdDTO ad: ads ){
-            System.out.println(ad.getHeader() + " " + ad.getUser().getEmail() + " " + ad.getCategory().getCategoryName());
 
             AdRest adRest;
             adRest = modelMapper.map(ad, AdRest.class);
@@ -167,8 +164,8 @@ public class AdController {
     @GetMapping(path = "/{userId}/userads")
     @CrossOrigin(origins = "*")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en bruger som ikke findes")})
-    @ApiOperation(value = "Hent alle salgsopslag fra en bestemt bruger",
-            notes = "Returnerer en liste med den bestemte brugers salgsopslag. Fejler hvis brugeren der tilkendegives med \"userId\" ikke findes.")
+    @ApiOperation(value = "Hent alle annoncer fra en bestemt bruger",
+            notes = "Returnerer en liste med den bestemte brugers annoncer. Fejler hvis brugeren der tilkendegives med \"userId\" ikke findes.")
     public List<AdRest> getUsersAds(@PathVariable String userId ) {
         UserDTO user = userService.getUserByUserID(userId);
         List<AdRest> returnValue = new ArrayList<AdRest>();

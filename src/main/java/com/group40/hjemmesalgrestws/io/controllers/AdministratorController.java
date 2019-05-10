@@ -55,7 +55,7 @@ public class AdministratorController {
     @CrossOrigin(origins = "*")
     @GetMapping()
     @ApiOperation(value = "Hent overblik/data/statistik på databasen",
-            notes = "Returnerer et overblik over: antal brugere, antal salgsopslag, antal salgsopslag pr. kategori og antal kategorier.")
+            notes = "Returnerer et overblik over: antal brugere, antal annoncer, antal annoncer pr. kategori og antal kategorier.")
     public AdminStatisticsRest getStatistics(){
         AdminStatisticsRest returnValue;
         AdminStatsDTO adminDTO = adminService.getStatistics();

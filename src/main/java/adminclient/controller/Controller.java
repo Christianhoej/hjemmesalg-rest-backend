@@ -94,8 +94,8 @@ public class Controller {
 
         String returnValue = "Antal brugere : " + usersCount +
                 "\nAntal kategorier: " + categoriesCount +
-                "\nAntal salgsopslag: " + adsCount +
-                "\nAntal salgsopslag fordelt på kategorier: \n";
+                "\nAntal annoncer: " + adsCount +
+                "\nAntal annoncer fordelt på kategorier: \n";
 
 
 
