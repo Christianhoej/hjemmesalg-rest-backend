@@ -6,6 +6,7 @@ import com.group40.hjemmesalgrestws.dtos.AdminStatsDTO;
 import com.group40.hjemmesalgrestws.io.models.administrator.request.AdminDetailsModel;
 import com.group40.hjemmesalgrestws.io.models.administrator.response.AdminStatisticsRest;
 import com.group40.hjemmesalgrestws.service.AdminService;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,9 +27,10 @@ public class AdministratorController {
     @CrossOrigin(origins = "*")
     @PostMapping(consumes = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ApiOperation(value = "Log ind som administrator",
+            notes = "Returnerer true hvis brugerautorisation lykkes gennem Jakobs JB-auth. Returnerer false hvis ikke det lykkedes")
     public boolean logIn(@RequestBody AdminDetailsModel adminLoginModel){
         boolean returnValue = false;
-        System.out.println(adminLoginModel.getEmail()+ " "+ adminLoginModel.getPassword());
         Brugeradmin ba = null;
         try {
             ba = (Brugeradmin) Naming.lookup("rmi://javabog.dk/brugeradmin");
@@ -46,13 +48,14 @@ public class AdministratorController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        System.out.println(returnValue);
 
         return returnValue;
 
     }
     @CrossOrigin(origins = "*")
     @GetMapping()
+    @ApiOperation(value = "Hent overblik/data/statistik på databasen",
+            notes = "Returnerer et overblik over: antal brugere, antal salgsopslag, antal salgsopslag pr. kategori og antal kategorier.")
     public AdminStatisticsRest getStatistics(){
         AdminStatisticsRest returnValue;
         AdminStatsDTO adminDTO = adminService.getStatistics();
