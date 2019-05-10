@@ -2,7 +2,7 @@ package com.group40.hjemmesalgrestws.io.models.user.reponse;
 
 public class UserRest {
     private String email;
-    private String password;
+    //private String password;
     private String phonenumber;
     private String firstName;
     private String lastName;
@@ -44,14 +44,14 @@ public class UserRest {
         this.email = email;
     }
 
-    public String getPassword() {
+  /*  public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-
+*/
     public String getPhonenumber() {
         return phonenumber;
     }
