@@ -8,6 +8,7 @@ import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
 import com.group40.hjemmesalgrestws.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -44,6 +45,22 @@ public class UserController {
         BeanUtils.copyProperties(userDTO,returnValue);
 
         return returnValue;
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping(path ="/checkEmail/{email}")
+    public boolean getUserByEmail(@PathVariable String email){
+      //  UserRest returnValue = new UserRest();
+
+        boolean userExist = userService.checkIfUserExist(email);
+        if(!userExist){
+            return true;
+        } else {
+            return false;
+        }
+       // BeanUtils.copyProperties(userDTO,returnValue);
+
+        //return returnValue;
     }
     @CrossOrigin(origins = "*")
     @PostMapping(path = "/login")//http://localhost:8080/Homely-ws/users/login

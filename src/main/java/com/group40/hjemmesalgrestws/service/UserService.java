@@ -17,5 +17,7 @@ public interface UserService {
 
     UserDTO getUserByEmail(String email);
 
+    boolean checkIfUserExist(String email);
+
     int getUsersCount();
 }
