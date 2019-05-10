@@ -2,6 +2,7 @@ package com.group40.hjemmesalgrestws.service.impl;
 
 import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.entitiy.AdEntity;
 import com.group40.hjemmesalgrestws.entitiy.CategoryEntity;
 import com.group40.hjemmesalgrestws.exceptions.CategoryServiceException;
 import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
@@ -84,9 +85,27 @@ public class CategoryService_Impl implements CategoryService {
     @Override
     public boolean deleteCategoryById(String id) {
         CategoryEntity categoryEntity = categoryRepository.findByCategoryId(Integer.parseInt(id));
-
+        //Check if category exist
         if(categoryEntity== null)  throw new CategoryServiceException(ErrorMessages.CATEGORY_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.CATEGORY_BY_ID_DOES_NOT_EXIST.getErrorFix());
+
+        CategoryEntity otherCategory = categoryRepository.findByCategoryName("Andet");
+        if (otherCategory==null) {
+            CategoryDTO otherDTO = new CategoryDTO();
+            otherDTO.setCategoryName("Andet");
+            createCategory(otherDTO);
+
+        }
+        //Henter ads der skal have ny kategori
+        List<AdEntity> adsToRename = categoryEntity.getAds();
+        otherCategory = categoryRepository.findByCategoryName("Andet");
+        for(int i = 0; i<adsToRename.size(); i++){
+            adsToRename.get(i).setCategory(otherCategory);
+        }
+
         categoryRepository.delete(categoryEntity);
+
+
+
 
         return true;
     }

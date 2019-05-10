@@ -19,7 +19,7 @@ public class UserController {
     UserService userService;
 
     @CrossOrigin(origins = "*")
-    @PostMapping(/*consumes = MediaType.APPLICATION_JSON*/)
+    @PostMapping()
     public boolean createUser(@RequestBody UserDetailsModel userdetails){
         UserRest returnValue = new UserRest();
 

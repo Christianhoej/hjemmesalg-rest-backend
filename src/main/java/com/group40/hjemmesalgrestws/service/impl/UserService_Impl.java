@@ -1,17 +1,21 @@
 package com.group40.hjemmesalgrestws.service.impl;
 
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
+import com.group40.hjemmesalgrestws.entitiy.AdEntity;
 import com.group40.hjemmesalgrestws.entitiy.UserEntity;
 import com.group40.hjemmesalgrestws.exceptions.ErrorFixes;
 import com.group40.hjemmesalgrestws.exceptions.ErrorMessages;
 import com.group40.hjemmesalgrestws.exceptions.UserServiceException;
 import com.group40.hjemmesalgrestws.io.models.user.request.UserLoginModel;
+import com.group40.hjemmesalgrestws.repository.AdRepository;
 import com.group40.hjemmesalgrestws.repository.UserRepository;
 import com.group40.hjemmesalgrestws.service.UserService;
 import com.group40.hjemmesalgrestws.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService_Impl implements UserService {
@@ -20,6 +24,9 @@ public class UserService_Impl implements UserService {
     Utils utils;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AdRepository adRepository;
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity check = userRepository.findByEmail(userDTO.getEmail());
@@ -94,7 +101,14 @@ public class UserService_Impl implements UserService {
 
         if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_USERID.getErrorFix());
 
-            returnValue = true;
+        //Finder brugerens Ads
+        List<AdEntity> adsToDelete = userEntity.getAds();
+        for(int i = 0; adsToDelete.size()>i; i++){
+            //adsToDelete.get(i).get;
+                    adRepository.delete(adsToDelete.get(i));
+        }
+
+        returnValue = true;
         userRepository.delete(userEntity);
 
         return returnValue;
