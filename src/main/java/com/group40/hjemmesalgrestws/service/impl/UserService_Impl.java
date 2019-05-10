@@ -14,6 +14,7 @@ import com.group40.hjemmesalgrestws.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.nio.cs.US_ASCII;
 
 import java.util.List;
 
@@ -118,11 +119,28 @@ public class UserService_Impl implements UserService {
     public UserDTO getUserByEmail(String email) {
         UserDTO returnValue = new UserDTO();
         UserEntity userEntity = userRepository.findByEmail(email);
-        if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
+        if(userEntity== null) //throw new UserServiceException(ErrorMessages.USER_ALREADY_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
 
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
     }
+
+    @Override
+    public boolean checkIfUserExist(String email) {
+        UserDTO returnValue = new UserDTO();
+        UserEntity userEntity = userRepository.findByEmail(email);
+        System.out.println(userEntity);
+        if(userEntity== null) {
+            return false;
+
+        }
+        else {
+            throw new UserServiceException(ErrorMessages.USER_ALREADY_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
+            //BeanUtils.copyProperties(userEntity,returnValue);
+            //return returnValue;
+        }
+    }
+
 
     @Override
     public int getUsersCount() {
