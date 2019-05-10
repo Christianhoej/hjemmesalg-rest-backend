@@ -135,17 +135,19 @@ public class AdController {
     }
 
 
-    @GetMapping(path = "/categoryads")
+    @GetMapping(path = "/categoryads/{id}")
     @CrossOrigin(origins = "*")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Der refereres til en kategori som ikke findes")})
     @ApiOperation(value = "Hent alle kategorier i en bestemt kategori",
             notes = "Returnerer en liste med alle salgsopslag i en bestemt kategori. Fejler hvis der ikke findes en kategori, som den der angives i requestbody (categoryDetailsModel).")
-    public List<AdRest> getCategoryAds(@RequestBody CategoryDetailsModel categoryDetailsModel, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value="limit", defaultValue = "25") int limit) {
+
+    public List<AdRest> getCategoryAds(@PathVariable String id,/*@RequestBody CategoryDetailsModel categoryDetailsModel,*/ @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value="limit", defaultValue = "25") int limit) {
+
 
         //if(page>0) page-=1; //TODO skal måske revurderes
         List<AdRest> returnValue = new ArrayList<AdRest>();
 
-        CategoryDTO categoryDTO = categoryService.getCatgoryByName(categoryDetailsModel.getCategoryName());
+        CategoryDTO categoryDTO = categoryService.getCatgoryByName(id);
         System.out.println(categoryDTO.getCategoryId() + " er categoryID");
         List<AdDTO> ads = adService.getCategoryAds(page, limit, categoryDTO);
 
