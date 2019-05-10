@@ -53,7 +53,6 @@ public class CategoryController {
             CategoryRest categoryRest = new CategoryRest();
             BeanUtils.copyProperties(cat,categoryRest);
             returnValue.add(categoryRest);
-            System.out.println(categoryRest.getCategoryName()+ categoryRest.getCategoryId());
         }
 
         return returnValue;
@@ -85,7 +84,6 @@ public class CategoryController {
         BeanUtils.copyProperties(newCategoryName,categoryDTO);
 
         CategoryDTO updatedCategory = categoryService.updateCategory(categoryDTO, id);
-        //System.out.println(updatedCategory.get);
         BeanUtils.copyProperties(updatedCategory, returnValue);
 
         return returnValue;
@@ -97,7 +95,7 @@ public class CategoryController {
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert path id. Der refereres til en kategori med et id som ikke findes")})
     @ApiOperation(value = "sletter bestemt kategori",
             notes = "Returnerer oplysninger om netop udførte operation. Fejler hvis kategorien angivet med \"{id}\" ikke findes.\n" +
-                    "Findes der salgsopslag af den slettede kategori, da sættes kategorien for disse salgsopslag til \"andet\"")
+                    "Findes der annoncer af den slettede kategori, da sættes kategorien for disse annoncer til \"andet\"")
     public DeleteStatusModel deleteCategory(@PathVariable String id) {
         DeleteStatusModel returnValue = new DeleteStatusModel();
         returnValue.setOperationName("Delete Category by categoryId: " + id + ": ");

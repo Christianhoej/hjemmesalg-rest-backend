@@ -101,7 +101,6 @@ public class UserController {
 
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userdetails,userDTO);
-        System.out.println(userDTO.getFirstName());
         UserDTO updatedUser = userService.updateUser(userDTO, id);
         BeanUtils.copyProperties(updatedUser, returnValue);
 
@@ -113,7 +112,7 @@ public class UserController {
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert path-variable \"{userId}\". Der refereres til en kategori med et id som ikke findes")})
     @ApiOperation(value = "Sletter eksisterende bruger",
             notes = "Returnerer informationer på netop udførte operation. Fejler hvis der ikke findes en bruger med det angivne pathvariable \"{userId}\".\n" +
-                    "Når en bruger slettes slettes salgsopslag fra brugeren også.")
+                    "Når en bruger slettes slettes annoncer fra brugeren også.")
     public DeleteStatusModel deleteUser(@PathVariable String userID){
         DeleteStatusModel returnValue = new DeleteStatusModel();
         returnValue.setOperationName("Delete User by userID: " + userID + ": ");
