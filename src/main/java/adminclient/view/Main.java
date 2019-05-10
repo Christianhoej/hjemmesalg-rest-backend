@@ -105,20 +105,26 @@ public class Main {
                     output = handleUpdateCategory(scanner);
 
                     System.out.println(output);
+                    categoryMenuMessage();
+
+
                     break;
                 case 3:
 
                     output = handleDeleteCategory(scanner);
-                    System.out.println(output);
+                    System.out.println(output + "\n");
+                    categoryMenuMessage();
 
                     break;
                 case 4:
                     showCategoryOpportunities();
-                    categoryMenuMessage();
                     break;
                 case 5:
                     output = createNewCategory(scanner);
-                    System.out.println(output);
+                    System.out.println(output + "\n");
+                    //Thread.sleep();
+                    categoryMenuMessage();
+
                     break;
                 case -1:
                     return;
