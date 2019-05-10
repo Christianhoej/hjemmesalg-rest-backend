@@ -62,9 +62,9 @@ public class UserController {
 
         boolean userExist = userService.checkIfUserExist(email);
         if(!userExist){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
        // BeanUtils.copyProperties(userDTO,returnValue);
 

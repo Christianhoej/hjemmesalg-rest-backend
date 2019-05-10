@@ -23,6 +23,7 @@ public class AdRest {
         this.category = category;
     }
 */
+
     public UserDTO getUser() {
         return user;
     }
