@@ -76,8 +76,7 @@ public class UserService_Impl implements UserService {
         UserDTO returnValue = new UserDTO();
 
         UserEntity userEntity = userRepository.findByEmail(userLoginModel.getEmail());
-
-        if(!(userEntity.getEmail().equals(userLoginModel.getEmail()) && userEntity.getPassword().equals(userLoginModel.getPassword()))) {
+        if(userEntity==null || !(userEntity.getEmail().equals(userLoginModel.getEmail()) && userEntity.getPassword().equals(userLoginModel.getPassword()))) {
             throw new UserServiceException(ErrorMessages.WRONG_LOGIN_CREDENTIALS.getErrorMessage(), ErrorFixes.WRONG_LOGIN_CREDENTIALS.getErrorFix());
         }
 
