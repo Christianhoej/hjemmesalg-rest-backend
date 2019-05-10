@@ -57,6 +57,9 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @GetMapping(path ="/checkEmail/{email}")
+    @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Brugeren med den angivne mail findes ikke")})
+    @ApiOperation(value = "Find bruger gennem email.",
+            notes = "Returnerer informationer på brugeren med angivne email. Fejler hvis der ikke findes en bruger med den i pathVariable angivne \"{email}\".")
     public boolean getUserByEmail(@PathVariable String email){
       //  UserRest returnValue = new UserRest();
 
@@ -74,7 +77,7 @@ public class UserController {
     @PostMapping(path = "/login")//http://localhost:8080/Homely-ws/users/login
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Forkert email eller password")})
     @ApiOperation(value = "Login med en eksisterende bruger.",
-            notes = "Returnerer informationer på brugeren der er logget ind på. Fejler hvis der ikke findes en bruger med den i requestbodyen angivne email.\n" +
+            notes = "Returnerer informationer på brugeren der er logget ind med. Fejler hvis der ikke findes en bruger med den i requestbodyen angivne email.\n" +
                     "Fejler også hvis ikke email og password passer på oplysningerne")
     public UserRest logIn(@RequestBody UserLoginModel userLoginModel){
         UserRest returnValue = new UserRest();
