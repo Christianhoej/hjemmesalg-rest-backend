@@ -11,6 +11,7 @@
     <groupId>com.group40</groupId>
     <artifactId>hjemmesalg-rest-ws</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>Hjemmesalg-Rest-WS</name>
     <description>backend til angular</description>
 
@@ -77,6 +78,13 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.9.2</version>
+        </dependency>
+
+        <!-- Tomcat  provided betyder det bliver genereret ved runtime og ikke compiletime-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
         </dependency>
 
 

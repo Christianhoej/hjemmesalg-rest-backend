@@ -1,11 +1,7 @@
 package com.group40.hjemmesalgrestws.repository;
 
 import com.group40.hjemmesalgrestws.entitiy.AdEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
