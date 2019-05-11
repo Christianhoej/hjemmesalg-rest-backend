@@ -76,8 +76,7 @@ public class UserService_Impl implements UserService {
         UserDTO returnValue = new UserDTO();
 
         UserEntity userEntity = userRepository.findByEmail(userLoginModel.getEmail());
-
-        if(!(userEntity.getEmail().equals(userLoginModel.getEmail()) && userEntity.getPassword().equals(userLoginModel.getPassword()))) {
+        if(userEntity==null || !(userEntity.getEmail().equals(userLoginModel.getEmail()) && userEntity.getPassword().equals(userLoginModel.getPassword()))) {
             throw new UserServiceException(ErrorMessages.WRONG_LOGIN_CREDENTIALS.getErrorMessage(), ErrorFixes.WRONG_LOGIN_CREDENTIALS.getErrorFix());
         }
 
@@ -119,7 +118,7 @@ public class UserService_Impl implements UserService {
     public UserDTO getUserByEmail(String email) {
         UserDTO returnValue = new UserDTO();
         UserEntity userEntity = userRepository.findByEmail(email);
-        if(userEntity== null) //throw new UserServiceException(ErrorMessages.USER_ALREADY_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
+        if(userEntity== null) throw new UserServiceException(ErrorMessages.USER_DOES_NOT_EXIST.getErrorMessage(), ErrorFixes.TRY_ANOTHER_EMAIL.getErrorFix());
 
         BeanUtils.copyProperties(userEntity,returnValue);
         return returnValue;
@@ -127,9 +126,7 @@ public class UserService_Impl implements UserService {
 
     @Override
     public boolean checkIfUserExist(String email) {
-        UserDTO returnValue = new UserDTO();
         UserEntity userEntity = userRepository.findByEmail(email);
-        System.out.println(userEntity);
         if(userEntity== null) {
             return false;
 

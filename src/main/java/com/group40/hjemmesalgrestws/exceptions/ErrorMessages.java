@@ -5,11 +5,11 @@ public enum ErrorMessages {
 
     CATEGORY_ALREADY_EXIST("Den kategori findes allerede!"),
 
-    AD_DOES_NOT_EXIST("Salgsopslaget findes ikke"),
+    AD_DOES_NOT_EXIST("Annoncen findes ikke"),
 
     WRONG_LOGIN_CREDENTIALS("Forkert brugernavn eller kodeord."),
 
-    COULD_NOT_DELETE_AD("Det var ikke muligt at slette opslaget."),
+    COULD_NOT_DELETE_AD("Det var ikke muligt at slette annonce."),
 
     USER_DOES_NOT_EXIST("Brugeren kunne ikke findes"),
 
