@@ -59,7 +59,7 @@ public class UserController {
     @GetMapping(path ="/checkEmail/{email}")
     @ApiResponses(value = { @ApiResponse(code = 666, message = "Forkert bruger input. Brugeren med den angivne mail findes ikke")})
     @ApiOperation(value = "Find bruger gennem email.",
-            notes = "Returnerer informationer på brugeren med angivne email. Fejler hvis der ikke findes en bruger med den i pathVariable angivne \"{email}\".")
+            notes = "Returnerer informationer på brugeren med angivne email. Fejler hvis der ikke findes en bruger med den i pathVariable angivne \"{email}\"." )
     public boolean getUserByEmail(@PathVariable String email){
       //  UserRest returnValue = new UserRest();
 
