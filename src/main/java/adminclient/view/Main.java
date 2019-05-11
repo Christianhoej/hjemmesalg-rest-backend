@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    private static Controller c;
+    /*private static Controller c;
     public static void main(String[] args) {
         c = new Controller();
         Scanner scanner = new Scanner(System.in);
@@ -219,6 +219,6 @@ public class Main {
         if(scanner.nextLine().equals(""));
 
 
-    }
+    }*/
 
 }
