@@ -27,7 +27,7 @@ import java.util.Scanner;
  */
 public class BenytBrugerdatabase {
 
-	public static void main(String[] args) throws IOException {
+	/*public static void main(String[] args) throws IOException {
 
 		Scanner scanner = new Scanner(System.in); // opret scanner-objekt
 
@@ -148,6 +148,6 @@ public class BenytBrugerdatabase {
 		System.out.println("Afslutter programmet... ");
 		db.gemTilFil(true);
 		System.exit(0);
-	}
+	}*/
 
 }

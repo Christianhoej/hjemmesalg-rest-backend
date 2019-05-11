@@ -13,7 +13,7 @@ import javax.xml.ws.Service;
  */
 public class Brugeradminklient {
 
-    public static void main(String[] args) throws MalformedURLException {
+    /*public static void main(String[] args) throws MalformedURLException {
         URL url = new URL("http://localhost:9901/brugeradmin?wsdl");
         //URL url = new URL("http://javabog.dk:9901/brugeradmin?wsdl");
         QName qname = new QName("http://soap.transport.brugerautorisation/", "BrugeradminImplService");
@@ -44,5 +44,5 @@ public class Brugeradminklient {
         ekstraFelt = ba.getEkstraFelt("s123456", "kode1xyz", "hobby");
         System.out.println("Brugerens hobby er: " + ekstraFelt);
 
-    }
+    }*/
 }

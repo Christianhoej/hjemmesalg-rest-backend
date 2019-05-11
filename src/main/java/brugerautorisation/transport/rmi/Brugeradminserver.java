@@ -9,7 +9,7 @@ public class Brugeradminserver
    * Der er ikke skiftet Java-version eller noget andet. Det begynder bare at ske. Velkommen til Distribuerede systemer.
    */
   private static BrugeradminImpl impl;
-	public static void main(String[] arg) throws IOException
+	/*public static void main(String[] arg) throws IOException
 	{
 		Brugerdatabase db = Brugerdatabase.getInstans();
 		System.out.println("Publicerer Brugeradmin over RMI");
@@ -18,7 +18,7 @@ public class Brugeradminserver
 		java.rmi.registry.LocateRegistry.createRegistry(1099); // start rmiregistry i server-JVM
 		Naming.rebind("rmi://localhost/brugeradmin", impl);
 		System.out.println("Brugeradmin publiceret over RMI");
-	}
+	}*/
 }
 /* Overfør til server med f.eks.:
 
