@@ -55,9 +55,9 @@ public class Controller {
 
 
     public String getStatistics() throws IOException {
-        String line;
-        StringBuffer responseContent = new StringBuffer();
-        BufferedReader bufferedReader;
+
+        StringBuffer responseContent;
+
         URL url = new URL(UrlConstants.ADMIN_STATISTICS.getUrl());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -66,7 +66,18 @@ public class Controller {
         connection.setConnectTimeout(10000);
         connection.setReadTimeout(5000);
 
+        responseContent = logContent(connection);
+
+        String returnValue = ReadJsonStatisticsResponse(responseContent.toString()); //TODO RETURNER String til VIEW
+        connection.disconnect();
+        return returnValue;
+    }
+
+    private static StringBuffer logContent(HttpURLConnection connection) throws IOException {
+        StringBuffer responseContent = new StringBuffer();
+        String line;
         int status = connection.getResponseCode();
+        BufferedReader bufferedReader;
         if(status>299) {
             bufferedReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             while ((line = bufferedReader.readLine()) != null) {
@@ -80,9 +91,7 @@ public class Controller {
                 responseContent.append(line);
             }
         }
-        String returnValue = ReadJsonStatisticsResponse(responseContent.toString()); //TODO RETURNER String til VIEW
-        connection.disconnect();
-        return returnValue;
+        return responseContent;
     }
 
     private static String ReadJsonStatisticsResponse(String responseBody) {
@@ -123,20 +132,8 @@ public class Controller {
             connection.setConnectTimeout(10000);
             connection.setReadTimeout(5000);
 
-            int status = connection.getResponseCode();
-            if(status>299) {
-                bufferedReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-                while ((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-                bufferedReader.close();
-            }
-            else{
-                bufferedReader =  new BufferedReader((new InputStreamReader(connection.getInputStream())));
-                while((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-            }
+            responseContent = logContent(connection);
+
 
             String returnValue = ReadJsonCategoriesResponse(responseContent.toString());
             connection.disconnect();
@@ -194,19 +191,7 @@ public class Controller {
             //StringBuilder sb = new StringBuilder();
             int HttpResult =con.getResponseCode();
 
-            if(HttpResult !=HttpURLConnection.HTTP_OK){
-                bufferedReader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                while ((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-                bufferedReader.close();
-            }
-            else{
-                bufferedReader =  new BufferedReader((new InputStreamReader(con.getInputStream())));
-                while((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-            }
+            responseContent = logContent(con);
 
             String returnValue;
             if(HttpResult ==HttpURLConnection.HTTP_OK)
@@ -283,19 +268,7 @@ public class Controller {
             //StringBuilder sb = new StringBuilder();
             int HttpResult =con.getResponseCode();
 
-            if(HttpResult !=HttpURLConnection.HTTP_OK){
-                bufferedReader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                while ((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-                bufferedReader.close();
-            }
-            else{
-                bufferedReader =  new BufferedReader((new InputStreamReader(con.getInputStream())));
-                while((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-            }
+            responseContent = logContent(con);
 
             String returnValue;
             if(HttpResult ==HttpURLConnection.HTTP_OK)
@@ -351,19 +324,7 @@ public class Controller {
 
             //StringBuilder sb = new StringBuilder();
             int HttpResult = con.getResponseCode();
-            if(HttpResult !=HttpURLConnection.HTTP_OK){
-                bufferedReader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                while ((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-                bufferedReader.close();
-            }
-            else{
-                bufferedReader =  new BufferedReader((new InputStreamReader(con.getInputStream())));
-                while((line = bufferedReader.readLine()) != null) {
-                    responseContent.append(line);
-                }
-            }
+            responseContent = logContent(con);
             String returnValue;
             if (HttpResult == HttpURLConnection.HTTP_OK)
                  returnValue = readSingleJsonCategoryResponse(responseContent.toString());
