@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    /*private static Controller c;
+    private static Controller c;
     public static void main(String[] args) {
         c = new Controller();
         Scanner scanner = new Scanner(System.in);
@@ -59,15 +59,15 @@ public class Main {
             System.out.println("Tryk -1 for at logge ud og afslutte programmet.");
 
 
-            int userInput = scanner.nextInt();
+            String userInput = scanner.nextLine();
             switch(userInput){
-                case 1:
+                case "1":
                     viewStatistics(scanner);
                     break;
-                case 2:
+                case "2":
                      handleCategories(scanner);
                     break;
-                case -1:
+                case "-1":
                     return;
 
                 default:
@@ -75,8 +75,6 @@ public class Main {
                     break;
 
             }
-
-
         }
 
     }
@@ -88,49 +86,37 @@ public class Main {
     }
 
     private static void handleCategories(Scanner scanner) {
-            categoryMenuMessage();
-        while(true) {
 
+        while(true) {
+            categoryMenuMessage();
 
             scanner = new Scanner(System.in);
-            int userInput = scanner.nextInt();
+            String userInput = scanner.nextLine();
             String output;
             switch (userInput){
-                case 1:
-                    output = c.fetchAllCategories();
-                    System.out.println(output);
-
+                case "1":
+                    viewCategories(scanner);
                     break;
-                case 2:
+                case "2":
                     output = handleUpdateCategory(scanner);
-
                     System.out.println(output);
-                    categoryMenuMessage();
-
-
                     break;
-                case 3:
+                case "3":
 
                     output = handleDeleteCategory(scanner);
                     System.out.println(output + "\n");
-                    categoryMenuMessage();
-
                     break;
-                case 4:
-                    showCategoryOpportunities();
+                case "4":
                     break;
-                case 5:
+                case "5":
                     output = createNewCategory(scanner);
                     System.out.println(output + "\n");
-                    //Thread.sleep();
-                    categoryMenuMessage();
-
                     break;
-                case -1:
+                case "-1":
                     return;
                 default:
                     System.out.println("Muligheden " + userInput + " findes ikke. Prøv igen.\n");
-                    showCategoryOpportunities();
+                    break;
             }
         }
     }
@@ -206,19 +192,27 @@ public class Main {
 
     }
 
-    private static void viewStatistics(Scanner scanner) {
-        System.out.println("Når du er færdig med at se statistikker, så tryk på enter: ");
-            try {
-                String s = c.getStatistics();
-                System.out.println(s);
-            } catch (IOException e) {
-                System.out.println("Noget gik galt. Statistikker kan ikke hentes lige nu Server er utilgængelig i øjeblikket! \n" +
-                        "tryk på en tast for at gå tilbage til hovedmenuen.");
-            }
+    private static void viewCategories(Scanner scanner) {
+        String output = c.fetchAllCategories();
+        System.out.println(output);
+        System.out.println("Når du er færdig med at se kategorier, så tryk på enter: ");
         scanner = new Scanner(System.in);
-        if(scanner.nextLine().equals(""));
+        scanner.nextLine();
 
+    }
 
-    }*/
+    private static void viewStatistics(Scanner scanner) {
+
+        try {
+            String s = c.getStatistics();
+            System.out.println(s);
+        } catch (IOException e) {
+            System.out.println("Noget gik galt. Statistikker kan ikke hentes lige nu Server er utilgængelig i øjeblikket! \n" +
+                    "tryk på en tast for at gå tilbage til hovedmenuen.");
+        }
+        System.out.println("Når du er færdig med at se statistikker, så tryk på enter: ");
+        scanner = new Scanner(System.in);
+        scanner.nextLine();
+    }
 
 }
