@@ -3,8 +3,9 @@ package com.group40.hjemmesalgrestws.io.models.ads.response;
 import com.group40.hjemmesalgrestws.dtos.CategoryDTO;
 import com.group40.hjemmesalgrestws.dtos.UserDTO;
 import com.group40.hjemmesalgrestws.io.models.user.reponse.UserRest;
+import org.springframework.hateoas.ResourceSupport;
 
-public class AdRest {
+public class AdRest extends ResourceSupport {
     private int adId;
     private String header;
     private String date;
