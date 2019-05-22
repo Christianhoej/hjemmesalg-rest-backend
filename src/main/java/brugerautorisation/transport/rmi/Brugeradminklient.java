@@ -6,7 +6,7 @@ import java.rmi.Naming;
 
 public class Brugeradminklient {
 
-    /*public static void main(String[] arg) throws Exception {
+    public static void main(String[] arg) throws Exception {
 //		Brugeradmin ba =(Brugeradmin) Naming.lookup("rmi://localhost/brugeradmin");
         Brugeradmin ba = (Brugeradmin) Naming.lookup("rmi://javabog.dk/brugeradmin");
 
@@ -27,5 +27,5 @@ public class Brugeradminklient {
 
         //String webside = (String) ba.getEkstraFelt("s175129", "Kode2405", "webside");
         //System.out.println("Brugerens webside er: " + webside);
-    }*/
+    }
 }

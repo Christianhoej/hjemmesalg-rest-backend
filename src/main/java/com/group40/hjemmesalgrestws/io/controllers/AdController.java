@@ -21,14 +21,18 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 @RestController()
-@RequestMapping("ads")
+@RequestMapping("/ads")
 public class AdController {
 
     @Autowired
@@ -94,7 +98,13 @@ public class AdController {
         AdDTO adDTO = adService.getAdByadId(id);
         BeanUtils.copyProperties(adDTO,returnValue);
         returnValue.setCategory(adDTO.getCategory().getCategoryName());
-
+        ModelMapper modelMapper = new ModelMapper();
+        //Til HATEOAS - Der kan tilføres så mange "relevante" links som muligt.
+        //Link adLink = linkTo(AdController.class).slash(id).withSelfRel(); //Kan også være withRel("Tekst der beskriver relationen");
+        Link adLink = linkTo(methodOn(AdController.class).getAd(id)).withSelfRel(); //Kan også være withRel("Tekst der beskriver relationen");
+        returnValue.add(adLink);
+        //Hvis man ønsker at tilføre HAL (En standard for levering af HATEOAS format, kan dette tilføres i GetMapping Annotationen under en produces
+        //I så fald skal Returntypes der indeholder lister (ekst List<AdRest> i stedet være Resources<AdRest> og samtidig skal returnValue wrappes i Resources<>(returnValue);
         return returnValue;
     }
     @CrossOrigin(origins = "*")
@@ -156,6 +166,8 @@ public class AdController {
             adRest = modelMapper.map(ad, AdRest.class);
             returnValue.add(adRest);
         }
+
+
 
         return returnValue;
 
